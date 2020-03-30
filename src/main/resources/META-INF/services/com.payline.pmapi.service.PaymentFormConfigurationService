@@ -1,1 +1,1 @@
-com.payline.payment.template.service.impl.PaymentFormConfigurationServiceImpl
+com.payline.payment.globalpos.service.impl.PaymentFormConfigurationServiceImpl

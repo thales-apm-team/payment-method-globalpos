@@ -1,1 +1,1 @@
-com.payline.payment.template.service.impl.ConfigurationServiceImpl
+com.payline.payment.globalpos.service.impl.ConfigurationServiceImpl

@@ -21,8 +21,8 @@ if (file(externalFileName).exists()) {
     apply from: "monext.gradle"
 }
 
-description = 'payment-method-template'
-group = 'com.payline.payment.template'
+description = 'payment-method-globalpos'
+group = 'com.payline.payment.globalpos'
 version = '1.0.0.0'
 
 sourceCompatibility = 1.8
