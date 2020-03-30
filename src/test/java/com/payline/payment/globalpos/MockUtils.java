@@ -1,5 +1,6 @@
 package com.payline.payment.globalpos;
 
+import com.payline.payment.globalpos.utils.Constants;
 import com.payline.payment.globalpos.utils.http.StringResponse;
 import com.payline.pmapi.bean.common.Buyer;
 import com.payline.pmapi.bean.configuration.PartnerConfiguration;
@@ -25,7 +26,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.mockito.Mockito.doReturn;
@@ -71,6 +71,7 @@ public class MockUtils {
     public static PartnerConfiguration aPartnerConfiguration() {
         Map<String, String> partnerConfigurationMap = new HashMap<>();
         Map<String, String> sensitiveConfigurationMap = new HashMap<>();
+        partnerConfigurationMap.put(Constants.PartnerConfigurationKeys.URL, "https://ws-recette.easy2play.fr/wstransac/");
         return new PartnerConfiguration(partnerConfigurationMap, sensitiveConfigurationMap);
     }
     /**------------------------------------------------------------------------------------------------------------------*/
@@ -348,17 +349,12 @@ public class MockUtils {
      */
     public static ContractConfiguration aContractConfiguration() {
         Map<String, ContractProperty> contractProperties = new HashMap<>();
-
-        return new ContractConfiguration("SplitIt", contractProperties);
+        contractProperties.put(Constants.ContractConfigurationKeys.GUID, new ContractProperty(guid));
+        contractProperties.put(Constants.ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(codeMagasin));
+        contractProperties.put(Constants.ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(numeroCaisse));
+        return new ContractConfiguration("globalpos", contractProperties);
     }
 
-    /**
-     * Generate a valid {@link ContractConfiguration}.
-     */
-    public static ContractConfiguration aContractConfigurationDefaultrequestedNumberOfInstallments() {
-        Map<String, ContractProperty> contractProperties = new HashMap<>();
-        return new ContractConfiguration("SplitIt", contractProperties);
-    }
 
     /**
      * Generate a valid {@link RedirectionPaymentRequest}.

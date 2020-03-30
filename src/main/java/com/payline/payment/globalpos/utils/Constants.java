@@ -9,9 +9,9 @@ public class Constants {
      * Keys for the entries in ContractConfiguration map.
      */
     public static class ContractConfigurationKeys {
-        private final String GUID = "guid";
-        private final String CODEMAGASIN = "codeMagasin";
-        private final String NUMEROCAISSE = "numeroCaisse";
+        public static final String GUID = "guid";
+        public static final String CODEMAGASIN = "codeMagasin";
+        public static final String NUMEROCAISSE = "numeroCaisse";
 
         /* Static utility class : no need to instantiate it (Sonar bug fix) */
         private ContractConfigurationKeys() {
