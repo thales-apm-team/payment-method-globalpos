@@ -37,8 +37,6 @@ public class MockUtils {
     private static String TRANSACTIONID = "123456789012345678901";
     private static String PARTNER_TRANSACTIONID = "1234";
 
-    /*------------------------------------------------------------------------------------------------------------------*/
-
     private static String amountValue = "1234";
     private static int refundAmount = 1;
 
@@ -46,7 +44,13 @@ public class MockUtils {
     static final Date date = new Date();
     static final String dateFormat = "yyyy-MM-dd";
     static LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-    private static String firstChargeDateOneMonth = localDateTime.plusMonths(1).format(DateTimeFormatter.ofPattern(dateFormat));
+
+    /*------------------------------------------------------------------------------------------------------------------*/
+
+    private static final String guid = "819ed9dc7f85075e771043072a6e8681";
+    private static final String codeMagasin = "ABBEV";
+    private static final String numeroCaisse = "Payline";
+    private static final String titre = "25394000194000103135057060172010123902001000";
 
 
     /**------------------------------------------------------------------------------------------------------------------*/
@@ -439,7 +443,7 @@ public class MockUtils {
     }
 
     /**
-     * Mock an HTTP Response with the given elements.
+     * Mock an HTTP APIResponseError with the given elements.
      *
      * @param statusCode    The status code (ex: 200)
      * @param statusMessage The status message (ex: "OK")
@@ -481,5 +485,41 @@ public class MockUtils {
         return RequestContext.RequestContextBuilder.aRequestContext()
                 .withRequestData(requestData)
                 .withSensitiveRequestData(requestSensitiveData);
+    }
+
+
+    public static String getTransacOK() {
+        return "<xml>\n" +
+                "  <codeErreur>1</codeErreur>\n" +
+                "  <NumTransac>5e7db72846ebd</NumTransac>\n" +
+                "</xml>";
+    }
+
+    public static String getTransacKO() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<xml>\n" +
+                "  <http_status>200</http_status>\n" +
+                "  <error>-50</error>\n" +
+                "  <message>Magasin inconnu de l'enseigne</message>\n" +
+                "  <detail/>\n" +
+                "</xml>";
+    }
+
+    public static String getTitreTransacOK() {
+        return "<xml>\n" +
+                "  <codeErreur>1</codeErreur>\n" +
+                "  <titre>INCO</titre>\n" +
+                "  <emetteur>940001</emetteur>\n" +
+                "  <montant>10</montant>\n" +
+                "  <dateValid>12/10/2020</dateValid>\n" +
+                "  <numTitre>3135057060</numTitre>\n" +
+                "  <ID>5e81e6db55962</ID>\n" +
+                "</xml>";
+    }
+
+    public static String setFinTransacOK() {
+        return "<xml>\n" +
+                "  <codeErreur>1</codeErreur>\n" +
+                "</xml>";
     }
 }

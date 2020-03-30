@@ -1,0 +1,17 @@
+package com.payline.payment.globalpos.bean.response;
+
+import com.payline.payment.globalpos.MockUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class GetTransacTest {
+
+    @Test
+    void fromXml() {
+        GetTransac value = GetTransac.fromXml(MockUtils.getTransacOK());
+        Assertions.assertNotNull(value.getCodeErreur());
+        Assertions.assertNotNull(value.getNumTransac());
+        Assertions.assertEquals("1", value.getCodeErreur());
+        Assertions.assertEquals("5e7db72846ebd", value.getNumTransac());
+    }
+}
