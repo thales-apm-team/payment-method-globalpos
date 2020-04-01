@@ -6,34 +6,33 @@ import com.google.gson.GsonBuilder;
 import com.payline.payment.globalpos.bean.configuration.RequestConfiguration;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.exception.PluginException;
+import com.payline.payment.globalpos.service.impl.PaymentServiceImpl;
+import com.payline.payment.globalpos.utils.Constants;
 import com.payline.payment.globalpos.utils.properties.ConfigProperties;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.logger.LogManager;
 import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHeader;
 import org.apache.logging.log4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class HttpClient {
     private static final Logger LOGGER = LogManager.getLogger(HttpClient.class);
     private Gson parser;
-    private final String urlLogin = "/api/Login";
-    private final String urlInitiate = "/api/InstallmentPlan/Initiate";
-    private final String urlGet = "/api/InstallmentPlan/Get";
-    private final String urlRefund = "/api/InstallmentPlan/Refund";
-    private final String urlCancel = "/api/InstallmentPlan/Cancel";
 
     // Exceptions messages
     private static final String SERVICE_URL_ERROR = "Service URL is invalid";
@@ -91,12 +90,12 @@ public class HttpClient {
     }
     // --- Singleton Holder pattern + initialization END
 
-    private Header[] createHeaders() {
-        Header[] headers = new Header[2];
-        headers[0] = new BasicHeader("Content-Type", "application/json");
-        headers[1] = new BasicHeader("Accept", "application/json");
-        return headers;
-    }
+//    private Header[] createHeaders() {
+//        Header[] headers = new Header[0];
+//        headers[0] = new BasicHeader("Content-Type", "application/json");
+//        headers[1] = new BasicHeader("Accept", "application/json");
+//        return headers;
+//    }
 
     /**
      * Send the request, with a retry system in case the client does not obtain a proper response from the server.
@@ -124,8 +123,31 @@ public class HttpClient {
         if (strResponse == null) {
             throw new PluginException("Failed to contact the partner API", FailureCause.COMMUNICATION_ERROR);
         }
-        LOGGER.info("Response obtained from partner API [{} {}]", strResponse.getStatusCode(), strResponse.getStatusMessage());
+        LOGGER.info("APIResponseError obtained from partner API [{} {}]", strResponse.getStatusCode(), strResponse.getStatusMessage());
         return strResponse;
+    }
+
+    /**
+     * Manage Get API call
+     *
+     * @param url     the url to call
+     * @param headers header(s) of the request
+     * @return
+     */
+    StringResponse get(String url, Header[] headers) {
+        URI uri;
+        try {
+            // Add the createOrderId to the url
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            throw new InvalidDataException(SERVICE_URL_ERROR, e);
+        }
+
+        final HttpGet httpGet = new HttpGet(uri);
+        httpGet.setHeaders(headers);
+
+        // Execute request
+        return this.execute(httpGet);
     }
 
     /**
@@ -153,8 +175,146 @@ public class HttpClient {
         return this.execute(httpPost);
     }
 
+    /**
+     * Initialise a transaction GlobalPOS
+     *
+     * @param configuration the request configuration
+     * @param numTicket     transactionID Payline
+     * @return content of the StringResponse
+     */
+    public String getTransac(RequestConfiguration configuration, String numTicket) {
+        verifData(configuration);
 
-    public String checkConnection(RequestConfiguration configuration) {
-        return null;
+        if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN) == null) {
+            throw new InvalidDataException("CODEMAGASIN is missing");
+        }
+
+        if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE) == null) {
+            throw new InvalidDataException("NUMEROCAISSE is missing");
+        }
+
+        // create the valid url
+        String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
+                + "/"
+                + "gettransac?guid="
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + "&magcaisse="
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN)
+                + "%7C"
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE)
+                + "&dateticket="
+                + computeDate()
+                + "&numticket="
+                + numTicket;
+
+        StringResponse response = get(url, null);
+
+        if (!response.isSuccess()) {
+            String error = "GetTransaction wrong data";
+            LOGGER.error(error);
+            throw new InvalidDataException(error);
+        } else {
+            return response.getContent();
+        }
+    }
+
+    /**
+     * Show all details of a check GlobalPOS
+     *
+     * @param configuration the request configuration
+     * @param numTransac    partnerTransactionID
+     * @return content of the StringResponse
+     */
+    public String getTitreDetailTransac(RequestConfiguration configuration, String numTransac) {
+        verifData(configuration);
+
+        if (configuration.getContractConfiguration().getProperty(Constants.FormConfigurationKeys.CABTITRE) == null) {
+            throw new InvalidDataException("CABTITRE is missing");
+        }
+
+        // create the valid url
+        String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
+                + "/"
+                + "gettitredetailtransac?guid="
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + "&numtransac="
+                + numTransac
+                + "&cabtitre="
+                + configuration.getContractConfiguration().getProperty(Constants.FormConfigurationKeys.CABTITRE);
+
+        StringResponse response = get(url, null);
+
+        if (!response.isSuccess()) {
+            String error = "GetTitreDetailTransac wrong data";
+            LOGGER.error(error);
+            throw new InvalidDataException(error);
+        } else {
+            return response.getContent();
+        }
+    }
+
+    /**
+     * end a transaction for GlobalPOS
+     *
+     * @param configuration the request configuration
+     * @param numTransac    partnerTransactionID
+     * @return content of the StringResponse
+     */
+    public String setFinTransac(RequestConfiguration configuration, String numTransac, PaymentServiceImpl.STATUS status) {
+        verifData(configuration);
+
+        // create the valid url
+        String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
+                + "/"
+                + "setfintransac?guid="
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + "&numtransac="
+                + numTransac
+                + "&statut="
+                + status;
+
+        StringResponse response = get(url, null);
+
+        if (!response.isSuccess()) {
+            String error = "setFinTransac wrong data";
+            LOGGER.error(error);
+            throw new InvalidDataException(error);
+        } else {
+            return response.getContent();
+        }
+    }
+
+    /**
+     * Check if the datas required for all request are empty or not
+     *
+     * @param configuration the request configuration
+     */
+    public void verifData(RequestConfiguration configuration) {
+        if (configuration.getPartnerConfiguration() == null) {
+            throw new InvalidDataException("PartnerConfiguration is empty");
+        }
+
+        if (configuration.getContractConfiguration() == null) {
+            throw new InvalidDataException("ContractConfiguration is empty");
+        }
+
+        if (configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL) == null) {
+            throw new InvalidDataException("URL is missing");
+        }
+
+        if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID) == null) {
+            throw new InvalidDataException("GUID is missing");
+        }
+    }
+
+    /**
+     * compute the date of the day for initialise the transaction
+     * date have format yyyyMMjjHHMMSS
+     *
+     * @return String the date of the day
+     */
+    public String computeDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        return format.format(new Date());
     }
 }

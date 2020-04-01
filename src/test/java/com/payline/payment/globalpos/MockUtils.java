@@ -355,6 +355,16 @@ public class MockUtils {
         return new ContractConfiguration("globalpos", contractProperties);
     }
 
+    /**
+     * Generate an invalid {@link ContractConfiguration}.
+     */
+    public static ContractConfiguration aContractConfigurationNoGUID() {
+        Map<String, ContractProperty> contractProperties = new HashMap<>();
+        contractProperties.put(Constants.ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(codeMagasin));
+        contractProperties.put(Constants.ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(numeroCaisse));
+        return new ContractConfiguration("globalpos", contractProperties);
+    }
+
 
     /**
      * Generate a valid {@link RedirectionPaymentRequest}.
@@ -517,5 +527,9 @@ public class MockUtils {
         return "<xml>\n" +
                 "  <codeErreur>1</codeErreur>\n" +
                 "</xml>";
+    }
+
+    public static String getTRANSACTIONID() {
+        return TRANSACTIONID;
     }
 }

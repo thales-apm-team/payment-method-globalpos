@@ -33,6 +33,8 @@ public class Constants {
      * Keys for the entries in RequestContext data.
      */
     public static class RequestContextKeys {
+        public static final String CONTEXT_DATA_STEP = "step";
+        public static final String NUMTRANSAC = "numTransac";
 
         /* Static utility class : no need to instantiate it (Sonar bug fix) */
         private RequestContextKeys() {
@@ -41,6 +43,7 @@ public class Constants {
 
     public static class FormConfigurationKeys {
         public static final String OPTIONS = "cleDesOptions";
+        public static final String CABTITRE = "cabTitre";
 
         public static final String PAYMENTBUTTONTEXT = "paymentButtonText.label";
         public static final String PAYMENTBUTTONDESC = "paymentButtonText.description";

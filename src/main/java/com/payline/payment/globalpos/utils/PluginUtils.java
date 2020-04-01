@@ -2,6 +2,8 @@ package com.payline.payment.globalpos.utils;
 
 
 import com.payline.payment.globalpos.utils.http.HttpClient;
+import com.payline.pmapi.bean.common.FailureCause;
+import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
 
 public class PluginUtils {
     private static HttpClient client = HttpClient.getInstance();
@@ -31,29 +33,29 @@ public class PluginUtils {
 
 
     /**
-     * Map some errors codes for create the paymentResponseFailure
+     * Map some errors codes for the appropriate FailureCause
      *
      * @param errorCode
-     * @return
+     * @return FailureCause
      */
-//    public static PaymentResponseFailure paymentResponseFailure(String errorCode) {
-//        FailureCause cause;
-//
-//        switch (errorCode) {
-//            case "599":
-//                cause = FailureCause.COMMUNICATION_ERROR;
-//                break;
-//
-//            case "400":
-//                cause = FailureCause.INVALID_FIELD_FORMAT;
-//                break;
-//
-//            default:
-//                cause = FailureCause.INVALID_DATA;
-//        }
-//        return PaymentResponseFailure.PaymentResponseFailureBuilder.aPaymentResponseFailure()
-//                .withErrorCode(errorCode)
-//                .withFailureCause(cause)
-//                .build();
-//    }
+    public static FailureCause getFailureCause(String errorCode) {
+        FailureCause cause;
+
+        switch (errorCode) {
+            case "-21":
+            case "-30":
+                cause = FailureCause.COMMUNICATION_ERROR;
+                break;
+
+            case "-60":
+            case "-70":
+            case "-80":
+                cause = FailureCause.REFUSED;
+                break;
+
+            default:
+                cause = FailureCause.INVALID_DATA;
+        }
+        return cause;
+    }
 }

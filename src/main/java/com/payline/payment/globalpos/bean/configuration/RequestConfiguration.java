@@ -48,10 +48,6 @@ public class RequestConfiguration {
         return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
     }
 
-    public static RequestConfiguration build(TransactionStatusRequest request) {
-        return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
-    }
-
     public static RequestConfiguration build(ContractParametersCheckRequest request) {
         return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
     }
