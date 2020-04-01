@@ -133,8 +133,14 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse step2(PaymentRequest request) {
         final RequestConfiguration configuration = RequestConfiguration.build(request);
 
+        if (request.getPaymentFormContext() == null || request.getPaymentFormContext().getPaymentFormParameter() == null
+                || request.getPaymentFormContext().getPaymentFormParameter().get(Constants.FormConfigurationKeys.CABTITRE) == null) {
+            throw new InvalidDataException("issues with the PaymentFormContext");
+        }
+
         String stringResponse = httpClient.getTitreDetailTransac(configuration,
-                request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC));
+                request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC),
+                request.getPaymentFormContext().getPaymentFormParameter().get(Constants.FormConfigurationKeys.CABTITRE));
         GetTitreDetailTransac response = GetTitreDetailTransac.fromXml(stringResponse);
 
         if (response.getCodeErreur().equals("1")) {

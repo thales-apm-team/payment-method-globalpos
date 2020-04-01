@@ -225,12 +225,8 @@ public class HttpClient {
      * @param numTransac    partnerTransactionID
      * @return content of the StringResponse
      */
-    public String getTitreDetailTransac(RequestConfiguration configuration, String numTransac) {
+    public String getTitreDetailTransac(RequestConfiguration configuration, String numTransac, String cabTitre) {
         verifData(configuration);
-
-        if (configuration.getContractConfiguration().getProperty(Constants.FormConfigurationKeys.CABTITRE) == null) {
-            throw new InvalidDataException("CABTITRE is missing");
-        }
 
         // create the valid url
         String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
@@ -240,7 +236,7 @@ public class HttpClient {
                 + "&numtransac="
                 + numTransac
                 + "&cabtitre="
-                + configuration.getContractConfiguration().getProperty(Constants.FormConfigurationKeys.CABTITRE);
+                + cabTitre;
 
         StringResponse response = get(url, null);
 
