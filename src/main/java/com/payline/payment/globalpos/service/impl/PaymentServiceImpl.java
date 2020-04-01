@@ -98,6 +98,9 @@ public class PaymentServiceImpl implements PaymentService {
      */
     public PaymentResponse step1(PaymentRequest request) {
         final RequestConfiguration configuration = RequestConfiguration.build(request);
+        if (request.getTransactionId() == null) {
+            throw new InvalidDataException("TransactionId is missing");
+        }
         String stringResponse = httpClient.getTransac(configuration, request.getTransactionId());
         GetTransac response = GetTransac.fromXml(stringResponse);
 
@@ -137,9 +140,13 @@ public class PaymentServiceImpl implements PaymentService {
                 || request.getPaymentFormContext().getPaymentFormParameter().get(Constants.FormConfigurationKeys.CABTITRE) == null) {
             throw new InvalidDataException("issues with the PaymentFormContext");
         }
+        if (request.getRequestContext() == null ||
+                request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC) == null) {
+            throw new InvalidDataException("issues with the numTransac in the requestContext");
+        }
 
-        String stringResponse = httpClient.getTitreDetailTransac(configuration,
-                request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC),
+        String numTransac = request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC);
+        String stringResponse = httpClient.getTitreDetailTransac(configuration, numTransac,
                 request.getPaymentFormContext().getPaymentFormParameter().get(Constants.FormConfigurationKeys.CABTITRE));
         GetTitreDetailTransac response = GetTitreDetailTransac.fromXml(stringResponse);
 
@@ -147,10 +154,6 @@ public class PaymentServiceImpl implements PaymentService {
             if (request.getAmount() == null || request.getAmount().getAmountInSmallestUnit() == null
                     || request.getAmount().getCurrency() == null) {
                 throw new InvalidDataException("issues with the requestAmount");
-            }
-            if (request.getRequestContext() == null ||
-                    request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC) == null) {
-                throw new InvalidDataException("issues with the numTransac in the requestContext");
             }
             if (response.getMontant() == null) {
                 throw new InvalidDataException("Amount is missing on the check");
@@ -190,8 +193,7 @@ public class PaymentServiceImpl implements PaymentService {
                 Map<String, String> requestContextMap = new HashMap<>();
                 // the next request, we don't want to do the same thing, so we tell us we want to go to the next step
                 requestContextMap.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, STEP3);
-                requestContextMap.put(Constants.RequestContextKeys.NUMTRANSAC,
-                        request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC));
+                requestContextMap.put(Constants.RequestContextKeys.NUMTRANSAC, numTransac);
 
                 RequestContext requestContext = RequestContext.RequestContextBuilder.aRequestContext()
                         .withRequestData(requestContextMap)
