@@ -52,6 +52,8 @@ public class MockUtils {
     private static final String numeroCaisse = "Payline";
     private static final String titre = "25394000194000103135057060172010123902001000";
 
+    private static final String numTransac = "5e7db72846ebd";
+
 
     /**------------------------------------------------------------------------------------------------------------------*/
 
@@ -358,10 +360,7 @@ public class MockUtils {
     /**
      * Generate an invalid {@link ContractConfiguration}.
      */
-    public static ContractConfiguration aContractConfigurationNoGUID() {
-        Map<String, ContractProperty> contractProperties = new HashMap<>();
-        contractProperties.put(Constants.ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(codeMagasin));
-        contractProperties.put(Constants.ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(numeroCaisse));
+    public static ContractConfiguration aContractConfigurationNoMap(Map<String, ContractProperty> contractProperties) {
         return new ContractConfiguration("globalpos", contractProperties);
     }
 
@@ -531,5 +530,45 @@ public class MockUtils {
 
     public static String getTRANSACTIONID() {
         return TRANSACTIONID;
+    }
+
+    public static String getAmountValue() {
+        return amountValue;
+    }
+
+    public static int getRefundAmount() {
+        return refundAmount;
+    }
+
+    public static Date getDate() {
+        return date;
+    }
+
+    public static String getDateFormat() {
+        return dateFormat;
+    }
+
+    public static LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public static String getGuid() {
+        return guid;
+    }
+
+    public static String getCodeMagasin() {
+        return codeMagasin;
+    }
+
+    public static String getNumeroCaisse() {
+        return numeroCaisse;
+    }
+
+    public static String getTitre() {
+        return titre;
+    }
+
+    public static String getNumTransac() {
+        return numTransac;
     }
 }

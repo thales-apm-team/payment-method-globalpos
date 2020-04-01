@@ -184,13 +184,16 @@ public class HttpClient {
      */
     public String getTransac(RequestConfiguration configuration, String numTicket) {
         verifData(configuration);
+        // url encode for the symbol |
+        // The API didn't control the numeroCaisse, but the url should contain a | after the CodeMagasin
+        String numCaisse = "%7C";
 
         if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN) == null) {
             throw new InvalidDataException("CODEMAGASIN is missing");
         }
 
-        if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE) == null) {
-            throw new InvalidDataException("NUMEROCAISSE is missing");
+        if (configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE) != null) {
+            numCaisse += configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE);
         }
 
         // create the valid url
@@ -200,8 +203,7 @@ public class HttpClient {
                 + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
                 + "&magcaisse="
                 + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN)
-                + "%7C"
-                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.NUMEROCAISSE)
+                + numCaisse
                 + "&dateticket="
                 + computeDate()
                 + "&numticket="
