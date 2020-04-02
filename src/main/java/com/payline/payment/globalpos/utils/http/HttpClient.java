@@ -15,10 +15,8 @@ import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.Logger;
 
@@ -90,12 +88,6 @@ public class HttpClient {
     }
     // --- Singleton Holder pattern + initialization END
 
-//    private Header[] createHeaders() {
-//        Header[] headers = new Header[0];
-//        headers[0] = new BasicHeader("Content-Type", "application/json");
-//        headers[1] = new BasicHeader("Accept", "application/json");
-//        return headers;
-//    }
 
     /**
      * Send the request, with a retry system in case the client does not obtain a proper response from the server.
@@ -150,30 +142,6 @@ public class HttpClient {
         return this.execute(httpGet);
     }
 
-    /**
-     * Manage Post API call
-     *
-     * @param url     the url to call
-     * @param headers header(s) of the request
-     * @param body    the body of the request
-     * @return
-     */
-    StringResponse post(String url, Header[] headers, StringEntity body) {
-        URI uri;
-        try {
-            // Add the createOrderId to the url
-            uri = new URI(url);
-        } catch (URISyntaxException e) {
-            throw new InvalidDataException(SERVICE_URL_ERROR, e);
-        }
-
-        final HttpPost httpPost = new HttpPost(uri);
-        httpPost.setHeaders(headers);
-        httpPost.setEntity(body);
-
-        // Execute request
-        return this.execute(httpPost);
-    }
 
     /**
      * Initialise a transaction GlobalPOS

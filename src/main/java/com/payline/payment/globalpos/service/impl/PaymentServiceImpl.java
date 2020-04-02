@@ -23,7 +23,6 @@ import com.payline.pmapi.bean.payment.response.impl.PaymentResponseSuccess;
 import com.payline.pmapi.bean.paymentform.bean.field.*;
 import com.payline.pmapi.bean.paymentform.bean.form.CardForm;
 import com.payline.pmapi.bean.paymentform.bean.form.CustomForm;
-import com.payline.pmapi.bean.paymentform.bean.scheme.Scheme;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
 import com.payline.pmapi.logger.LogManager;
 import com.payline.pmapi.service.PaymentService;

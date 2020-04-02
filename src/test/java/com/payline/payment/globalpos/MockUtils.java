@@ -540,7 +540,7 @@ public class MockUtils {
                 .withSensitiveRequestData(requestSensitiveData);
     }
 
-    public static RequestContext.RequestContextBuilder aRequestContextBuilderStep2(String contextData, String numTransac) {
+    public static RequestContext.RequestContextBuilder aRequestContextBuilderStep(String contextData, String numTransac) {
         Map<String, String> requestSensitiveData = new HashMap<>();
         Map<String, String> requestData = new HashMap<>();
         requestData.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, contextData);
@@ -605,6 +605,16 @@ public class MockUtils {
     public static String setFinTransacOK() {
         return "<xml>\n" +
                 "  <codeErreur>1</codeErreur>\n" +
+                "</xml>";
+    }
+
+    public static String setFinTransacKO() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<xml>\n" +
+                "  <http_status>200</http_status>\n" +
+                "  <error>-100</error>\n" +
+                "  <message>La transaction actuelle n'existe pas</message>\n" +
+                "  <detail/>\n" +
                 "</xml>";
     }
 

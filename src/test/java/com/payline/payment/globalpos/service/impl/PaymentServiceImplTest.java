@@ -4,11 +4,11 @@ import com.payline.payment.globalpos.MockUtils;
 import com.payline.payment.globalpos.bean.response.GetTitreDetailTransac;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.utils.http.HttpClient;
-import com.payline.pmapi.bean.payment.RequestContext;
 import com.payline.pmapi.bean.payment.request.PaymentRequest;
 import com.payline.pmapi.bean.payment.response.PaymentResponse;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFormUpdated;
+import com.payline.pmapi.bean.payment.response.impl.PaymentResponseSuccess;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class PaymentServiceImplTest {
     void step2() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", MockUtils.getNumTransac()).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
                 .build();
         Mockito.doReturn(MockUtils.getTitreTransacOK()).when(client).getTitreDetailTransac(any(), any(), any());
         PaymentResponse response = service.step2(request);
@@ -75,7 +75,7 @@ class PaymentServiceImplTest {
     @Test
     void step2NoCabTitre() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", null).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", null).build())
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(null))
                 .build();
 
@@ -88,7 +88,7 @@ class PaymentServiceImplTest {
     @Test
     void step2CheckEqual() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestCheckEqualBuilder(MockUtils.getAmountValueEqualCheck())
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", MockUtils.getNumTransac()).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
                 .build();
         Mockito.doReturn(MockUtils.getTitreTransacOK()).when(client).getTitreDetailTransac(any(), any(), any());
         PaymentResponse response = service.step2(request);
@@ -98,7 +98,7 @@ class PaymentServiceImplTest {
     @Test
     void step2CheckLower() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestCheckEqualBuilder(MockUtils.getAmountValueLowerCheck())
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", MockUtils.getNumTransac()).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
                 .build();
         Mockito.doReturn(MockUtils.getTitreTransacOK()).when(client).getTitreDetailTransac(any(), any(), any());
         PaymentResponse response = service.step2(request);
@@ -109,7 +109,7 @@ class PaymentServiceImplTest {
     @Test
     void step2KO() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestCheckEqualBuilder(MockUtils.getAmountValueLowerCheck())
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", MockUtils.getNumTransac()).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
                 .build();
         Mockito.doReturn(MockUtils.getTitreTransacKO()).when(client).getTitreDetailTransac(any(), any(), any());
         PaymentResponse response = service.step2(request);
@@ -119,7 +119,7 @@ class PaymentServiceImplTest {
     @Test
     void step2KOWrongAmount() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestCheckEqualBuilder(MockUtils.getAmountValueLowerCheck())
-                .withRequestContext(MockUtils.aRequestContextBuilderStep2("STEP2", MockUtils.getNumTransac()).build())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
                 .build();
         Mockito.doReturn(MockUtils.getTitreTransacWrongAmount()).when(client).getTitreDetailTransac(any(), any(), any());
 
@@ -130,15 +130,81 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void formCabTitre() {
+    void step3OK() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP3", MockUtils.getNumTransac()).build())
+                .build();
+        Mockito.doReturn(MockUtils.setFinTransacOK()).when(client).setFinTransac(any(), any(), any());
+        PaymentResponse response = service.step3(request, PaymentServiceImpl.STATUS.COMMIT);
+        Assertions.assertEquals(PaymentResponseSuccess.class, response.getClass());
     }
 
     @Test
-    void formRecapPayment() {
+    void step3Rollback() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP3", MockUtils.getNumTransac()).build())
+                .build();
+        Mockito.doReturn(MockUtils.setFinTransacOK()).when(client).setFinTransac(any(), any(), any());
+        PaymentResponse response = service.step3(request, PaymentServiceImpl.STATUS.ROLLBACK);
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
     }
 
     @Test
-    void responseFailure() {
+    void step3KO() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP3", MockUtils.getNumTransac()).build())
+                .build();
+        Mockito.doReturn(MockUtils.setFinTransacKO()).when(client).setFinTransac(any(), any(), any());
+        PaymentResponse response = service.step3(request, PaymentServiceImpl.STATUS.ROLLBACK);
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+    }
+
+    @Test
+    void PSStep1() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep(null, MockUtils.getNumTransac()).build())
+                .build();
+
+        Mockito.doReturn(MockUtils.getTransacOK()).when(client).getTransac(any(), any());
+        PaymentResponse response = service.paymentRequest(request);
+        Assertions.assertEquals(PaymentResponseFormUpdated.class, response.getClass());
+    }
+
+    @Test
+    void PSStep2() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP2", MockUtils.getNumTransac()).build())
+                .build();
+        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(client).getTitreDetailTransac(any(), any(), any());
+        PaymentResponse response = service.paymentRequest(request);
+        Assertions.assertEquals(PaymentResponseFormUpdated.class, response.getClass());
+    }
+
+    @Test
+    void PSStep3() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP3", MockUtils.getNumTransac()).build())
+                .build();
+        Mockito.doReturn(MockUtils.setFinTransacOK()).when(client).setFinTransac(any(), any(), any());
+        PaymentResponse response = service.paymentRequest(request);
+        Assertions.assertEquals(PaymentResponseSuccess.class, response.getClass());
+    }
+
+    @Test
+    void PSStepFaulse() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
+                .withPaymentFormContext(MockUtils.aPaymentFormContext())
+                .withRequestContext(MockUtils.aRequestContextBuilderStep("STEP4", MockUtils.getNumTransac()).build())
+                .build();
+//        Mockito.doReturn(MockUtils.setFinTransacOK()).when(client).setFinTransac(any(), any(), any());
+        PaymentResponse response = service.paymentRequest(request);
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
     }
 
     @Test
