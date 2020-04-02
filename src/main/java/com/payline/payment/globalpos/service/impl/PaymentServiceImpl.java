@@ -20,12 +20,10 @@ import com.payline.pmapi.bean.payment.response.buyerpaymentidentifier.impl.Empty
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFormUpdated;
 import com.payline.pmapi.bean.payment.response.impl.PaymentResponseSuccess;
-import com.payline.pmapi.bean.paymentform.bean.field.InputType;
-import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormDisplayFieldText;
-import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormField;
-import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormInputFieldText;
+import com.payline.pmapi.bean.paymentform.bean.field.*;
 import com.payline.pmapi.bean.paymentform.bean.form.CardForm;
 import com.payline.pmapi.bean.paymentform.bean.form.CustomForm;
+import com.payline.pmapi.bean.paymentform.bean.scheme.Scheme;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
 import com.payline.pmapi.logger.LogManager;
 import com.payline.pmapi.service.PaymentService;
@@ -98,13 +96,15 @@ public class PaymentServiceImpl implements PaymentService {
      */
     public PaymentResponse step1(PaymentRequest request) {
         final RequestConfiguration configuration = RequestConfiguration.build(request);
-        if (request.getTransactionId() == null) {
+        // should never append
+        if (request.getTransactionId() == null || PluginUtils.isEmpty(request.getTransactionId())) {
             throw new InvalidDataException("TransactionId is missing");
         }
         String stringResponse = httpClient.getTransac(configuration, request.getTransactionId());
         GetTransac response = GetTransac.fromXml(stringResponse);
 
-        if (response.getCodeErreur().equals("1")) {
+        // 1 if response is OK, else is null
+        if (response.getCodeErreur() != null) {
             // everything is ok
             Map<String, String> requestContextMap = new HashMap<>();
             // the next request, we don't want to do the same thing, so we tell us we want to go to the next step
@@ -150,7 +150,8 @@ public class PaymentServiceImpl implements PaymentService {
                 request.getPaymentFormContext().getPaymentFormParameter().get(Constants.FormConfigurationKeys.CABTITRE));
         GetTitreDetailTransac response = GetTitreDetailTransac.fromXml(stringResponse);
 
-        if (response.getCodeErreur().equals("1")) {
+        // 1 if response is OK, else is null
+        if (response.getCodeErreur() != null) {
             if (request.getAmount() == null || request.getAmount().getAmountInSmallestUnit() == null
                     || request.getAmount().getCurrency() == null) {
                 throw new InvalidDataException("issues with the requestAmount");
@@ -173,10 +174,15 @@ public class PaymentServiceImpl implements PaymentService {
                     // -1 if gpAmount < paylineAmount
                     // ok, but return the form for the credit card
                     case -1:
-                        CardForm cardForm = CardForm.builder().build();
+                        CustomForm form = CardForm.builder()
+                                .withSchemes(new ArrayList<>())
+                                .withDescription(i18n.getMessage("customFormDescCardForm.description", request.getLocale()))
+                                .withCustomFields(new ArrayList<>())
+                                .build();
+
                         recap = PaymentFormConfigurationResponseSpecific.PaymentFormConfigurationResponseSpecificBuilder
                                 .aPaymentFormConfigurationResponseSpecific()
-                                .withPaymentForm(cardForm)
+                                .withPaymentForm(form)
                                 .build();
                         break;
                     // 0 if gpAmount = paylineAmount
@@ -233,7 +239,9 @@ public class PaymentServiceImpl implements PaymentService {
         String numTransac = request.getRequestContext().getRequestData().get(Constants.RequestContextKeys.NUMTRANSAC);
         String stringResponse = httpClient.setFinTransac(configuration, numTransac, status);
         SetFinTransac response = SetFinTransac.fromXml(stringResponse);
-        if (response.getCodeErreur().equals("1")) {
+
+        // 1 if response is OK, else is null
+        if (response.getCodeErreur() != null) {
             // the request worked
             if (status == STATUS.COMMIT) {
                 // everything is ok, end the transaction
@@ -287,10 +295,14 @@ public class PaymentServiceImpl implements PaymentService {
                 .withLabel(i18n.getMessage("formCabTitre.label", locale))
                 .withRequired(true)
                 .withInputType(InputType.NUMBER)
+                .withFieldIcon(FieldIcon.CARD)
                 .build();
         listForm.add(form);
 
-        CustomForm customForm = CustomForm.builder().withCustomFields(listForm).build();
+        CustomForm customForm = CustomForm.builder()
+                .withCustomFields(listForm)
+                .withDescription(i18n.getMessage("customFormDescTitre.description", locale))
+                .build();
 
         return PaymentFormConfigurationResponseSpecific.PaymentFormConfigurationResponseSpecificBuilder
                 .aPaymentFormConfigurationResponseSpecific()

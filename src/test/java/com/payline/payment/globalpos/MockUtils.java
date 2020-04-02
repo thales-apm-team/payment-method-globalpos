@@ -224,6 +224,16 @@ public class MockUtils {
                 .build();
     }
 
+    public static PaymentFormContext aPaymentFormContextStep2() {
+        Map<String, String> paymentFormParameter = new HashMap<>();
+        paymentFormParameter.put(Constants.FormConfigurationKeys.CABTITRE, titre);
+
+        return PaymentFormContext.PaymentFormContextBuilder.aPaymentFormContext()
+                .withPaymentFormParameter(paymentFormParameter)
+                .withSensitivePaymentFormParameter(new HashMap<>())
+                .build();
+    }
+
     /**------------------------------------------------------------------------------------------------------------------*/
     /**
      * Generate a valid {@link ContractParametersCheckRequest}.
@@ -267,7 +277,22 @@ public class MockUtils {
                 .withLocale(Locale.getDefault())
                 .withOrder(aPaylineOrder())
                 .withPartnerConfiguration(aPartnerConfiguration())
-                .withPaymentFormContext(aPaymentFormContext())
+//                .withPaymentFormContext(aPaymentFormContext())
+                .withSoftDescriptor("softDescriptor")
+                .withTransactionId(TRANSACTIONID);
+    }
+
+    public static PaymentRequest.Builder aPaylinePaymentRequestNoRequestcontextBuilder() {
+        return PaymentRequest.builder()
+                .withAmount(aPaylineAmount())
+                .withBrowser(aBrowser())
+                .withBuyer(aBuyer())
+                .withCaptureNow(true)
+                .withContractConfiguration(aContractConfiguration())
+                .withEnvironment(anEnvironment())
+                .withLocale(Locale.getDefault())
+                .withOrder(aPaylineOrder())
+                .withPartnerConfiguration(aPartnerConfiguration())
                 .withSoftDescriptor("softDescriptor")
                 .withTransactionId(TRANSACTIONID);
     }
@@ -487,6 +512,16 @@ public class MockUtils {
     public static RequestContext.RequestContextBuilder aRequestContextBuilder() {
         Map<String, String> requestSensitiveData = new HashMap<>();
         Map<String, String> requestData = new HashMap<>();
+        return RequestContext.RequestContextBuilder.aRequestContext()
+                .withRequestData(requestData)
+                .withSensitiveRequestData(requestSensitiveData);
+    }
+
+    public static RequestContext.RequestContextBuilder aRequestContextBuilderStep2() {
+        Map<String, String> requestSensitiveData = new HashMap<>();
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, "STEP2");
+        requestData.put(Constants.RequestContextKeys.NUMTRANSAC, numTransac);
         return RequestContext.RequestContextBuilder.aRequestContext()
                 .withRequestData(requestData)
                 .withSensitiveRequestData(requestSensitiveData);
