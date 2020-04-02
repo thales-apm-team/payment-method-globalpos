@@ -568,6 +568,30 @@ public class MockUtils {
                 "</xml>";
     }
 
+    public static String getTransacKO60() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<xml>\n" +
+                "  <http_status>200</http_status>\n" +
+                "  <error>-60</error>\n" +
+                "  <message>un message</message>\n" +
+                "  <detail/>\n" +
+                "</xml>";
+    }
+
+    public static String noXml() {
+        return "pas du xml";
+    }
+
+    public static String getTransacKO30() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<xml>\n" +
+                "  <http_status>200</http_status>\n" +
+                "  <error>-30</error>\n" +
+                "  <message>un message</message>\n" +
+                "  <detail/>\n" +
+                "</xml>";
+    }
+
     public static String getTitreTransacOK() {
         return "<xml>\n" +
                 "  <codeErreur>1</codeErreur>\n" +

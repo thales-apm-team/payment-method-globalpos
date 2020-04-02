@@ -3,7 +3,6 @@ package com.payline.payment.globalpos.utils;
 
 import com.payline.payment.globalpos.utils.http.HttpClient;
 import com.payline.pmapi.bean.common.FailureCause;
-import com.payline.pmapi.bean.payment.response.impl.PaymentResponseFailure;
 
 public class PluginUtils {
     private static HttpClient client = HttpClient.getInstance();

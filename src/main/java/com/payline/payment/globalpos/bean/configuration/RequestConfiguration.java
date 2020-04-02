@@ -35,10 +35,6 @@ public class RequestConfiguration {
         return contractConfiguration;
     }
 
-    public Environment getEnvironment() {
-        return environment;
-    }
-
     public PartnerConfiguration getPartnerConfiguration() {
         return partnerConfiguration;
     }

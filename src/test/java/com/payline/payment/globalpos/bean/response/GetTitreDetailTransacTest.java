@@ -1,6 +1,7 @@
 package com.payline.payment.globalpos.bean.response;
 
 import com.payline.payment.globalpos.MockUtils;
+import com.payline.payment.globalpos.exception.InvalidDataException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,5 +26,13 @@ class GetTitreDetailTransacTest {
         Assertions.assertEquals("12/10/2020", value.getDateValid());
         Assertions.assertEquals("3135057060", value.getNumTitre());
         Assertions.assertEquals("5e81e6db55962", value.getId());
+    }
+
+    @Test
+    void noXml() {
+        Throwable thrown = assertThrows(InvalidDataException.class,
+                () -> GetTitreDetailTransac.fromXml(MockUtils.noXml()));
+
+        Assertions.assertEquals("Unable to parse XML GetTitreDetailTransac", thrown.getMessage());
     }
 }

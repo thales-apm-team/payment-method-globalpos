@@ -62,6 +62,22 @@ class PaymentServiceImplTest {
     }
 
     @Test
+    void step1KOError60() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequest();
+        Mockito.doReturn(MockUtils.getTransacKO60()).when(client).getTransac(any(), any());
+        PaymentResponse response = service.step1(request);
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+    }
+
+    @Test
+    void step1KOError30() {
+        PaymentRequest request = MockUtils.aPaylinePaymentRequest();
+        Mockito.doReturn(MockUtils.getTransacKO30()).when(client).getTransac(any(), any());
+        PaymentResponse response = service.step1(request);
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+    }
+
+    @Test
     void step2() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequestNoRequestContextBuilder()
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
