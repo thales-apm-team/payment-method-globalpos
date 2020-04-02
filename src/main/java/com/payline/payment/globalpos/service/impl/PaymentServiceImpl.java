@@ -166,10 +166,10 @@ public class PaymentServiceImpl implements PaymentService {
                 PaymentFormConfigurationResponseSpecific recap;
 
                 switch (gpAmount.compareTo(paylineAmount)) {
-                    // 1 if gpAmount > paylineAmount
-                    // wrong => return an error
+                    // 0 if gpAmount = paylineAmount
+                    // the best scenario, return the form for the summary
                     case 0:
-                        recap = formRecapPayment(response);
+                        recap = formRecapPayment(response, request.getLocale());
                         break;
                     // -1 if gpAmount < paylineAmount
                     // ok, but return the form for the credit card
@@ -185,8 +185,8 @@ public class PaymentServiceImpl implements PaymentService {
                                 .withPaymentForm(form)
                                 .build();
                         break;
-                    // 0 if gpAmount = paylineAmount
-                    // the best scenario, return the form for the summary
+                    // 1 if gpAmount > paylineAmount
+                    // wrong => return an error
                     case 1:
                     default:
                         return PaymentResponseFailure.PaymentResponseFailureBuilder.aPaymentResponseFailure()
@@ -211,7 +211,7 @@ public class PaymentServiceImpl implements PaymentService {
                         .build();
 
             } catch (NumberFormatException e) {
-                throw new NumberFormatException(e.toString());
+                throw new NumberFormatException("Amount in the check is not a valid number");
             }
 
         } else {
@@ -316,7 +316,7 @@ public class PaymentServiceImpl implements PaymentService {
      * @param response the response of the getTitreDetailTransac request
      * @return PaymentFormConfigurationResponseSpecific with a list of PaymentFormDisplayFieldText
      */
-    public PaymentFormConfigurationResponseSpecific formRecapPayment(GetTitreDetailTransac response) {
+    public PaymentFormConfigurationResponseSpecific formRecapPayment(GetTitreDetailTransac response, Locale locale) {
         List<PaymentFormField> listForm = new ArrayList();
 
         PaymentFormDisplayFieldText titre = PaymentFormDisplayFieldText.PaymentFormDisplayFieldTextBuilder
@@ -343,7 +343,10 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
         listForm.add(dateValid);
 
-        CustomForm customForm = CustomForm.builder().withCustomFields(listForm).build();
+        CustomForm customForm = CustomForm.builder()
+                .withCustomFields(listForm)
+                .withDescription(i18n.getMessage("formRecap.description", locale))
+                .build();
 
         return PaymentFormConfigurationResponseSpecific.PaymentFormConfigurationResponseSpecificBuilder
                 .aPaymentFormConfigurationResponseSpecific()

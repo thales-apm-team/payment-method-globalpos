@@ -2,6 +2,7 @@ package com.payline.payment.globalpos;
 
 import com.payline.payment.globalpos.utils.Constants;
 import com.payline.payment.globalpos.utils.http.StringResponse;
+import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.Buyer;
 import com.payline.pmapi.bean.configuration.PartnerConfiguration;
 import com.payline.pmapi.bean.configuration.request.ContractParametersCheckRequest;
@@ -38,6 +39,8 @@ public class MockUtils {
     private static String PARTNER_TRANSACTIONID = "1234";
 
     private static String amountValue = "1234";
+    private static String amountValueEqualCheck = "1000";
+    private static String amountValueLowerCheck = "800";
     private static int refundAmount = 1;
 
 
@@ -138,16 +141,20 @@ public class MockUtils {
     /**
      * Generate a valid Payline Amount.
      */
-    public static com.payline.pmapi.bean.common.Amount aPaylineAmount() {
+    public static Amount aPaylineAmount() {
         return aPaylineAmount(Integer.parseInt(amountValue));
     }
 
-    public static com.payline.pmapi.bean.common.Amount aPaylineRefundAmount() {
+    public static Amount aPaylineAmountCheckEqual() {
+        return aPaylineAmount(Integer.parseInt(amountValueEqualCheck));
+    }
+
+    public static Amount aPaylineRefundAmount() {
         return aPaylineAmount(refundAmount);
     }
 
-    public static com.payline.pmapi.bean.common.Amount aPaylineAmount(int amount) {
-        return new com.payline.pmapi.bean.common.Amount(BigInteger.valueOf(amount), Currency.getInstance("EUR"));
+    public static Amount aPaylineAmount(int amount) {
+        return new Amount(BigInteger.valueOf(amount), Currency.getInstance("EUR"));
     }
 
 
@@ -224,7 +231,7 @@ public class MockUtils {
                 .build();
     }
 
-    public static PaymentFormContext aPaymentFormContextStep2() {
+    public static PaymentFormContext aPaymentFormContextStep2(String titre) {
         Map<String, String> paymentFormParameter = new HashMap<>();
         paymentFormParameter.put(Constants.FormConfigurationKeys.CABTITRE, titre);
 
@@ -277,12 +284,12 @@ public class MockUtils {
                 .withLocale(Locale.getDefault())
                 .withOrder(aPaylineOrder())
                 .withPartnerConfiguration(aPartnerConfiguration())
-//                .withPaymentFormContext(aPaymentFormContext())
+                .withPaymentFormContext(aPaymentFormContext())
                 .withSoftDescriptor("softDescriptor")
                 .withTransactionId(TRANSACTIONID);
     }
 
-    public static PaymentRequest.Builder aPaylinePaymentRequestNoRequestcontextBuilder() {
+    public static PaymentRequest.Builder aPaylinePaymentRequestNoRequestContextBuilder() {
         return PaymentRequest.builder()
                 .withAmount(aPaylineAmount())
                 .withBrowser(aBrowser())
@@ -293,6 +300,22 @@ public class MockUtils {
                 .withLocale(Locale.getDefault())
                 .withOrder(aPaylineOrder())
                 .withPartnerConfiguration(aPartnerConfiguration())
+                .withSoftDescriptor("softDescriptor")
+                .withTransactionId(TRANSACTIONID);
+    }
+
+    public static PaymentRequest.Builder aPaylinePaymentRequestCheckEqualBuilder(String amount) {
+        return PaymentRequest.builder()
+                .withAmount(aPaylineAmount(Integer.parseInt(amount)))
+                .withBrowser(aBrowser())
+                .withBuyer(aBuyer())
+                .withCaptureNow(true)
+                .withContractConfiguration(aContractConfiguration())
+                .withEnvironment(anEnvironment())
+                .withLocale(Locale.getDefault())
+                .withOrder(aPaylineOrder())
+                .withPartnerConfiguration(aPartnerConfiguration())
+                .withPaymentFormContext(aPaymentFormContextStep2(titre))
                 .withSoftDescriptor("softDescriptor")
                 .withTransactionId(TRANSACTIONID);
     }
@@ -517,10 +540,10 @@ public class MockUtils {
                 .withSensitiveRequestData(requestSensitiveData);
     }
 
-    public static RequestContext.RequestContextBuilder aRequestContextBuilderStep2() {
+    public static RequestContext.RequestContextBuilder aRequestContextBuilderStep2(String contextData, String numTransac) {
         Map<String, String> requestSensitiveData = new HashMap<>();
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, "STEP2");
+        requestData.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, contextData);
         requestData.put(Constants.RequestContextKeys.NUMTRANSAC, numTransac);
         return RequestContext.RequestContextBuilder.aRequestContext()
                 .withRequestData(requestData)
@@ -555,6 +578,28 @@ public class MockUtils {
                 "  <numTitre>3135057060</numTitre>\n" +
                 "  <ID>5e81e6db55962</ID>\n" +
                 "</xml>";
+    }
+
+    public static String getTitreTransacWrongAmount() {
+        return "<xml>\n" +
+                "  <codeErreur>1</codeErreur>\n" +
+                "  <titre>INCO</titre>\n" +
+                "  <emetteur>940001</emetteur>\n" +
+                "  <montant>1a</montant>\n" +
+                "  <dateValid>12/10/2020</dateValid>\n" +
+                "  <numTitre>3135057060</numTitre>\n" +
+                "  <ID>5e81e6db55962</ID>\n" +
+                "</xml>";
+    }
+
+    public static String getTitreTransacKO() {
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<xml>\n" +
+                "  <http_status>200</http_status>\n" +
+                "  <error>-100</error>\n" +
+                "  <message>La transaction actuelle n'existe pas</message>\n" +
+                "  <detail/>\n" +
+                "</xml>\n";
     }
 
     public static String setFinTransacOK() {
@@ -605,5 +650,13 @@ public class MockUtils {
 
     public static String getNumTransac() {
         return numTransac;
+    }
+
+    public static String getAmountValueEqualCheck() {
+        return amountValueEqualCheck;
+    }
+
+    public static String getAmountValueLowerCheck() {
+        return amountValueLowerCheck;
     }
 }
