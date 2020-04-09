@@ -40,12 +40,6 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void paymentRequest() {
-        PaymentRequest request = MockUtils.aPaylinePaymentRequest();
-        System.out.println(request.getTransactionId());
-    }
-
-    @Test
     void step1OK() {
         PaymentRequest request = MockUtils.aPaylinePaymentRequest();
         Mockito.doReturn(MockUtils.getTransacOK()).when(client).getTransac(any(), any());

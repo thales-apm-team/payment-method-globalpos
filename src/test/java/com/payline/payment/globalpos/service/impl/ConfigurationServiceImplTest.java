@@ -37,15 +37,9 @@ class ConfigurationServiceImplTest {
     @Mock
     private HttpClient client;
 
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-    }
-
-
-    @Test
-    void getParameters() {
     }
 
     @Test
@@ -59,12 +53,13 @@ class ConfigurationServiceImplTest {
     @Test
     void getReleaseInformation() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String version = "M.m.p";
+//        String version = "M.m.p";
+        String version = "1.0.0.0";
 
         // given: the release properties are OK
         doReturn(version).when(releaseProperties).get("release.version");
         Calendar cal = new GregorianCalendar();
-        cal.set(2019, Calendar.AUGUST, 19);
+        cal.set(2020, Calendar.APRIL, 9);
         doReturn(formatter.format(cal.getTime())).when(releaseProperties).get("release.date");
 
         // when: calling the method getReleaseInformation
@@ -72,9 +67,9 @@ class ConfigurationServiceImplTest {
 
         // then: releaseInformation contains the right values
         assertEquals(version, releaseInformation.getVersion());
-        assertEquals(2019, releaseInformation.getDate().getYear());
-        assertEquals(Month.AUGUST, releaseInformation.getDate().getMonth());
-        assertEquals(19, releaseInformation.getDate().getDayOfMonth());
+        assertEquals(2020, releaseInformation.getDate().getYear());
+        assertEquals(Month.APRIL, releaseInformation.getDate().getMonth());
+        assertEquals(9, releaseInformation.getDate().getDayOfMonth());
     }
 
     @Test

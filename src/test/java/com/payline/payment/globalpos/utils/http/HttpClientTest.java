@@ -217,12 +217,4 @@ class HttpClientTest {
         Assertions.assertEquals("setFinTransac wrong data", thrown.getMessage());
 
     }
-
-    @Test
-    void verifData() {
-    }
-
-    @Test
-    void computeDate() {
-    }
 }

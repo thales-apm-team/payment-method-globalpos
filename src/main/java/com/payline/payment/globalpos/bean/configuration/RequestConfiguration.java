@@ -13,7 +13,6 @@ import com.payline.pmapi.bean.payment.request.PaymentRequest;
 public class RequestConfiguration {
 
     private ContractConfiguration contractConfiguration;
-    private Environment environment;
     private PartnerConfiguration partnerConfiguration;
 
     public RequestConfiguration(ContractConfiguration contractConfiguration, Environment environment, PartnerConfiguration partnerConfiguration) {
@@ -27,7 +26,6 @@ public class RequestConfiguration {
             throw new InvalidDataException("Missing request partnerConfiguration");
         }
         this.contractConfiguration = contractConfiguration;
-        this.environment = environment;
         this.partnerConfiguration = partnerConfiguration;
     }
 

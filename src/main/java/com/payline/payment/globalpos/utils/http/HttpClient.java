@@ -166,11 +166,11 @@ public class HttpClient {
 
         // create the valid url
         String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
-                + "/"
+//                + "/"
                 + "gettransac?guid="
-                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID).getValue()
                 + "&magcaisse="
-                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN)
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN).getValue()
                 + numCaisse
                 + "&dateticket="
                 + computeDate()
@@ -200,9 +200,9 @@ public class HttpClient {
 
         // create the valid url
         String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
-                + "/"
+//                + "/"
                 + "gettitredetailtransac?guid="
-                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID).getValue()
                 + "&numtransac="
                 + numTransac
                 + "&cabtitre="
@@ -224,6 +224,7 @@ public class HttpClient {
      *
      * @param configuration the request configuration
      * @param numTransac    partnerTransactionID
+     * @param status the status of the transaction COMMIT or ROLLBACK
      * @return content of the StringResponse
      */
     public String setFinTransac(RequestConfiguration configuration, String numTransac, PaymentServiceImpl.STATUS status) {
@@ -231,13 +232,13 @@ public class HttpClient {
 
         // create the valid url
         String url = configuration.getPartnerConfiguration().getProperty(Constants.PartnerConfigurationKeys.URL)
-                + "/"
                 + "setfintransac?guid="
-                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID)
+                + configuration.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID).getValue()
                 + "&numtransac="
                 + numTransac
                 + "&statut="
                 + status;
+
 
         StringResponse response = get(url, null);
 

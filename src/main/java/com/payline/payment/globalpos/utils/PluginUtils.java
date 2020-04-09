@@ -1,11 +1,9 @@
 package com.payline.payment.globalpos.utils;
 
 
-import com.payline.payment.globalpos.utils.http.HttpClient;
 import com.payline.pmapi.bean.common.FailureCause;
 
 public class PluginUtils {
-    private static HttpClient client = HttpClient.getInstance();
 
 
     private PluginUtils() {

@@ -22,11 +22,12 @@ import java.util.*;
 public class ConfigurationServiceImpl implements ConfigurationService {
     private static final Logger LOGGER = LogManager.getLogger(ConfigurationServiceImpl.class);
 
-    private ReleaseProperties releaseProperties = ReleaseProperties.getInstance();
-    private I18nService i18n = I18nService.getInstance();
+    private final ReleaseProperties releaseProperties = ReleaseProperties.getInstance();
+    private final I18nService i18n = I18nService.getInstance();
     private HttpClient client = HttpClient.getInstance();
 
     private static final String I18N_CONTRACT_PREFIX = "contract.";
+    private static final String NUM_TICKET = "1234";
 
     @Override
     public List<AbstractParameter> getParameters(Locale locale) {
@@ -75,6 +76,21 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         // If partner id is missing, no need to go further, as it is required
         if (!errors.isEmpty()) {
             return errors;
+        }
+
+        try {
+            String guid = request.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.GUID).getValue();
+            String codeMagasin = request.getContractConfiguration().getProperty(Constants.ContractConfigurationKeys.CODEMAGASIN).getValue();
+            if (PluginUtils.isEmpty(guid)) {
+                errors.put(Constants.ContractConfigurationKeys.GUID, i18n.getMessage("guid.empty", locale));
+            } else if (PluginUtils.isEmpty(codeMagasin)) {
+                errors.put(Constants.ContractConfigurationKeys.CODEMAGASIN, i18n.getMessage("codeMagasin.empty", locale));
+            } else {
+                client.getTransac(configuration, NUM_TICKET);
+            }
+        } catch (PluginException e) {
+            errors.put(Constants.ContractConfigurationKeys.GUID, i18n.getMessage("guid.invalid", locale));
+            errors.put(Constants.ContractConfigurationKeys.CODEMAGASIN, i18n.getMessage("codeMagasin.invalid", locale));
         }
 
         return errors;

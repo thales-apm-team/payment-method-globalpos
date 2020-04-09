@@ -42,7 +42,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     // the status for finalize the transaction can only be COMMIT or ROLLBACK
     public enum STATUS {
-        COMMIT, ROLLBACK
+        ROLLBACK,
+        COMMIT
     }
 
     @Override
