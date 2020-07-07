@@ -37,7 +37,9 @@ public class NotificationServiceImpl implements NotificationService {
 
 
         // finalize the transaction
-        LOGGER.info("Call Global pos API to finalize transaction {} with status:{}", partnerTransactionId, status.name());
+        String name = status.name();
+        LOGGER.info("Call Global pos API to finalize transaction {} with status:{}", partnerTransactionId, name);
+
         httpService.setFinTransact(configuration, partnerTransactionId, status);
     }
 }

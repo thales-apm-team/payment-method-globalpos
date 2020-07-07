@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HttpService {
-    private static final Logger LOGGER = LogManager.getLogger(HttpClient.class);
+    private static final Logger LOGGER = LogManager.getLogger(HttpService.class);
     private HttpClient client = HttpClient.getInstance();
 
     private static final String PIPE = "|";

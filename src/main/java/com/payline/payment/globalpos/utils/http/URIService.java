@@ -23,6 +23,11 @@ public class URIService {
     private static final String CAB_TITRE = "cabtitre";
     private static final String STATUS = "statut";
 
+
+    private URIService() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Create the URL with all values needed to create a transaction
      * @param baseUrl

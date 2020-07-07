@@ -253,7 +253,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         SetFinTransac response = SetFinTransac.fromXml(stringResponse);
 
-        if (response == null | response.getCodeErreur() == null) {
+        if (response == null || response.getCodeErreur() == null) {
             paymentResponse = this.responseFailure(APIResponseError.fromXml(stringResponse));
         } else {
             paymentResponse = PaymentResponseSuccess.PaymentResponseSuccessBuilder.aPaymentResponseSuccess()
@@ -387,7 +387,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         // create a field text to display why the buyer has to retry
         String sAmount = AmountParse.splitDecimal(amount).toString();
-        String sCurrency = amount.getCurrency().getSymbol(locale);//.getDisplayName(locale);
+        String sCurrency = amount.getCurrency().getSymbol(locale);
         PaymentFormDisplayFieldText displayRetryMessage = PaymentFormDisplayFieldText.PaymentFormDisplayFieldTextBuilder.aPaymentFormDisplayFieldText()
                 .withContent(i18n.getMessage("formCabTitre.retryMessage", locale, sAmount, sCurrency))
                 .build();
@@ -448,7 +448,8 @@ public class PaymentServiceImpl implements PaymentService {
      * @return PaymentResponseFailure
      */
     public PaymentResponseFailure responseFailure(APIResponseError response) {
-        LOGGER.info("Failure While calling API:{}", response.toString());
+
+        LOGGER.info("Failure While calling API:{}", response);
         return PaymentResponseFailure.PaymentResponseFailureBuilder.aPaymentResponseFailure()
                 .withErrorCode(PluginUtils.truncate(response.getMessage(), 50))
                 .withFailureCause(PluginUtils.getFailureCause(response.getError()))

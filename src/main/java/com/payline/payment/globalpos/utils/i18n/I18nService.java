@@ -49,12 +49,16 @@ public class I18nService {
     public String getMessage(final String key, final Locale locale, String ... s) {
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
         try {
-            String message = messages.getString(key);
+
+            StringBuilder msg = new StringBuilder();
+
+            msg.append(messages.getString(key));
 
             for (String arg : s) {
-                message = message + " " + arg;
+                msg.append(" ").append(arg);
             }
-            return message;
+
+            return msg.toString();
 
         } catch (MissingResourceException e) {
             LOGGER.error("Trying to get a message with a key that does not exist: {} (language: {})", key, locale.getLanguage());

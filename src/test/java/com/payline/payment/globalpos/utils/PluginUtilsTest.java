@@ -44,7 +44,4 @@ class PluginUtilsTest {
         Assertions.assertFalse(PluginUtils.isEmpty("foo"));
     }
 
-    @Test
-    void getFailureCause() {
-    }
 }
