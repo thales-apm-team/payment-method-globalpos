@@ -39,4 +39,13 @@ public class APIResponseError {
             throw new InvalidDataException("Unable to parse XML GlobalPOSAPIResponse", e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "error='" + error + '\'' +
+                ", message='" + message + '\'' +
+                ", detail='" + detail + '\'' +
+                '}';
+    }
 }

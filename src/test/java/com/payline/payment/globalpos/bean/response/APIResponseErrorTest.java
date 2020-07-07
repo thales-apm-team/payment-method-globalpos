@@ -1,7 +1,6 @@
 package com.payline.payment.globalpos.bean.response;
 
 import com.payline.payment.globalpos.MockUtils;
-import com.payline.payment.globalpos.bean.response.APIResponseError;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

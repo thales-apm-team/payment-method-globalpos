@@ -1,6 +1,9 @@
 package com.payline.payment.globalpos;
 
-import com.payline.payment.globalpos.utils.Constants;
+import com.payline.payment.globalpos.utils.constant.ContractConfigurationKeys;
+import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
+import com.payline.payment.globalpos.utils.constant.PartnerConfigurationKeys;
+import com.payline.payment.globalpos.utils.constant.RequestContextKeys;
 import com.payline.payment.globalpos.utils.http.StringResponse;
 import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.Buyer;
@@ -38,9 +41,7 @@ public class MockUtils {
     private static String TRANSACTIONID = "123456789012345678901";
     private static String PARTNER_TRANSACTIONID = "1234";
 
-    private static String amountValue = "1234";
-    private static String amountValueEqualCheck = "1000";
-    private static String amountValueLowerCheck = "800";
+    private static String amountValue = "1000";
     private static int refundAmount = 1;
 
 
@@ -76,7 +77,7 @@ public class MockUtils {
     public static PartnerConfiguration aPartnerConfiguration() {
         Map<String, String> partnerConfigurationMap = new HashMap<>();
         Map<String, String> sensitiveConfigurationMap = new HashMap<>();
-        partnerConfigurationMap.put(Constants.PartnerConfigurationKeys.URL, "https://ws-recette.easy2play.fr/wstransac/");
+        partnerConfigurationMap.put(PartnerConfigurationKeys.URL, "https://ws-recette.easy2play.fr");
         return new PartnerConfiguration(partnerConfigurationMap, sensitiveConfigurationMap);
     }
     /**------------------------------------------------------------------------------------------------------------------*/
@@ -143,10 +144,6 @@ public class MockUtils {
      */
     public static Amount aPaylineAmount() {
         return aPaylineAmount(Integer.parseInt(amountValue));
-    }
-
-    public static Amount aPaylineAmountCheckEqual() {
-        return aPaylineAmount(Integer.parseInt(amountValueEqualCheck));
     }
 
     public static Amount aPaylineRefundAmount() {
@@ -233,7 +230,7 @@ public class MockUtils {
 
     public static PaymentFormContext aPaymentFormContextStep2(String titre) {
         Map<String, String> paymentFormParameter = new HashMap<>();
-        paymentFormParameter.put(Constants.FormConfigurationKeys.CABTITRE, titre);
+        paymentFormParameter.put(FormConfigurationKeys.CABTITRE, titre);
 
         return PaymentFormContext.PaymentFormContextBuilder.aPaymentFormContext()
                 .withPaymentFormParameter(paymentFormParameter)
@@ -284,41 +281,10 @@ public class MockUtils {
                 .withLocale(Locale.getDefault())
                 .withOrder(aPaylineOrder())
                 .withPartnerConfiguration(aPartnerConfiguration())
-                .withPaymentFormContext(aPaymentFormContext())
                 .withSoftDescriptor("softDescriptor")
                 .withTransactionId(TRANSACTIONID);
     }
 
-    public static PaymentRequest.Builder aPaylinePaymentRequestNoRequestContextBuilder() {
-        return PaymentRequest.builder()
-                .withAmount(aPaylineAmount())
-                .withBrowser(aBrowser())
-                .withBuyer(aBuyer())
-                .withCaptureNow(true)
-                .withContractConfiguration(aContractConfiguration())
-                .withEnvironment(anEnvironment())
-                .withLocale(Locale.getDefault())
-                .withOrder(aPaylineOrder())
-                .withPartnerConfiguration(aPartnerConfiguration())
-                .withSoftDescriptor("softDescriptor")
-                .withTransactionId(TRANSACTIONID);
-    }
-
-    public static PaymentRequest.Builder aPaylinePaymentRequestCheckEqualBuilder(String amount) {
-        return PaymentRequest.builder()
-                .withAmount(aPaylineAmount(Integer.parseInt(amount)))
-                .withBrowser(aBrowser())
-                .withBuyer(aBuyer())
-                .withCaptureNow(true)
-                .withContractConfiguration(aContractConfiguration())
-                .withEnvironment(anEnvironment())
-                .withLocale(Locale.getDefault())
-                .withOrder(aPaylineOrder())
-                .withPartnerConfiguration(aPartnerConfiguration())
-                .withPaymentFormContext(aPaymentFormContextStep2(titre))
-                .withSoftDescriptor("softDescriptor")
-                .withTransactionId(TRANSACTIONID);
-    }
 
     public static RefundRequest aPaylineRefundRequest() {
         return aPaylineRefundRequestBuilder().build();
@@ -399,9 +365,9 @@ public class MockUtils {
      */
     public static ContractConfiguration aContractConfiguration() {
         Map<String, ContractProperty> contractProperties = new HashMap<>();
-        contractProperties.put(Constants.ContractConfigurationKeys.GUID, new ContractProperty(guid));
-        contractProperties.put(Constants.ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(codeMagasin));
-        contractProperties.put(Constants.ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(numeroCaisse));
+        contractProperties.put(ContractConfigurationKeys.GUID, new ContractProperty(guid));
+        contractProperties.put(ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(codeMagasin));
+        contractProperties.put(ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(numeroCaisse));
         return new ContractConfiguration("globalpos", contractProperties);
     }
 
@@ -543,8 +509,8 @@ public class MockUtils {
     public static RequestContext.RequestContextBuilder aRequestContextBuilderStep(String contextData, String numTransac) {
         Map<String, String> requestSensitiveData = new HashMap<>();
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(Constants.RequestContextKeys.CONTEXT_DATA_STEP, contextData);
-        requestData.put(Constants.RequestContextKeys.NUMTRANSAC, numTransac);
+        requestData.put(RequestContextKeys.CONTEXT_DATA_STEP, contextData);
+        requestData.put(RequestContextKeys.NUMTRANSAC, numTransac);
         return RequestContext.RequestContextBuilder.aRequestContext()
                 .withRequestData(requestData)
                 .withSensitiveRequestData(requestSensitiveData);
@@ -684,13 +650,5 @@ public class MockUtils {
 
     public static String getNumTransac() {
         return numTransac;
-    }
-
-    public static String getAmountValueEqualCheck() {
-        return amountValueEqualCheck;
-    }
-
-    public static String getAmountValueLowerCheck() {
-        return amountValueLowerCheck;
     }
 }

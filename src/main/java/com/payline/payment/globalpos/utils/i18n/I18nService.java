@@ -46,4 +46,19 @@ public class I18nService {
     }
 
     // If ever needed, implement getMessage( String, Locale, String... ) to insert values into the translation messages
+    public String getMessage(final String key, final Locale locale, String ... s) {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
+        try {
+            String message = messages.getString(key);
+
+            for (String arg : s) {
+                message = message + " " + arg;
+            }
+            return message;
+
+        } catch (MissingResourceException e) {
+            LOGGER.error("Trying to get a message with a key that does not exist: {} (language: {})", key, locale.getLanguage());
+            return "???" + locale + "." + key + "???";
+        }
+    }
 }

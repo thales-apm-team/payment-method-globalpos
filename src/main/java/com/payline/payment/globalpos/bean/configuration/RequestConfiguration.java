@@ -5,6 +5,7 @@ import com.payline.pmapi.bean.configuration.PartnerConfiguration;
 import com.payline.pmapi.bean.configuration.request.ContractParametersCheckRequest;
 import com.payline.pmapi.bean.payment.ContractConfiguration;
 import com.payline.pmapi.bean.payment.Environment;
+import com.payline.pmapi.bean.payment.request.NotifyTransactionStatusRequest;
 import com.payline.pmapi.bean.payment.request.PaymentRequest;
 
 /**
@@ -37,6 +38,9 @@ public class RequestConfiguration {
         return partnerConfiguration;
     }
 
+    public static RequestConfiguration build(NotifyTransactionStatusRequest request) {
+        return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
+    }
     public static RequestConfiguration build(PaymentRequest request) {
         return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
     }

@@ -1,7 +1,10 @@
 package com.payline.payment.globalpos.utils;
 
 
+import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.pmapi.bean.common.FailureCause;
+
+import java.time.YearMonth;
 
 public class PluginUtils {
 
@@ -25,9 +28,20 @@ public class PluginUtils {
      * @return
      */
     public static boolean isEmpty(String value) {
-        return value == null || value.isEmpty();
+        return value == null || value.trim().isEmpty();
     }
 
+    public static YearMonth createYearMonthFromExpiry(String expiry) {
+        if (isEmpty(expiry) || expiry.length() != 4) {
+            throw new InvalidDataException("expiry must be 4 digit, not:" + expiry);
+
+        }
+        int month = Integer.parseInt(expiry.substring(0, 2));
+        int year = 2000 + Integer.parseInt(expiry.substring(2, 4));
+
+        return YearMonth.of(year, month);
+
+    }
 
     /**
      * Map some errors codes for the appropriate FailureCause
