@@ -41,6 +41,7 @@ public class RequestConfiguration {
     public static RequestConfiguration build(NotifyTransactionStatusRequest request) {
         return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
     }
+
     public static RequestConfiguration build(PaymentRequest request) {
         return new RequestConfiguration(request.getContractConfiguration(), request.getEnvironment(), request.getPartnerConfiguration());
     }

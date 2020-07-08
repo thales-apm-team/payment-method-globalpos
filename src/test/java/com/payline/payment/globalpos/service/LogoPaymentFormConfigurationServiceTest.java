@@ -24,99 +24,98 @@ import static org.mockito.Mockito.doReturn;
 class LogoPaymentFormConfigurationServiceTest {
 
 
-        /**
-         * Private class used to test abstract class {@link LogoPaymentFormConfigurationService}.
-         */
-        private static class TestService extends LogoPaymentFormConfigurationService {
-            @Override
-            public PaymentFormConfigurationResponse getPaymentFormConfiguration(PaymentFormConfigurationRequest paymentFormConfigurationRequest) {
-                return null;
-            }
+    /**
+     * Private class used to test abstract class {@link LogoPaymentFormConfigurationService}.
+     */
+    private static class TestService extends LogoPaymentFormConfigurationService {
+        @Override
+        public PaymentFormConfigurationResponse getPaymentFormConfiguration(PaymentFormConfigurationRequest paymentFormConfigurationRequest) {
+            return null;
         }
+    }
 
-        @InjectMocks
-        private TestService testService;
+    @InjectMocks
+    private TestService testService;
 
-        @Mock
-        private I18nService i18n;
-        @Mock private ConfigProperties config;
+    @Mock
+    private I18nService i18n;
+    @Mock
+    private ConfigProperties config;
 
-        @BeforeEach
-        void setup(){
-            testService = new TestService();
-            MockitoAnnotations.initMocks( this );
-        }
+    @BeforeEach
+    void setup() {
+        testService = new TestService();
+        MockitoAnnotations.initMocks(this);
+    }
 
-        @Test
-        void getPaymentFormLogo_nominal(){
-            // given: the configuration is correct
-            PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
-            doReturn("64").when( config ).get("logo.height");
-            doReturn("64").when( config ).get("logo.width");
-            doReturn( "CVConnect" ).when( i18n ).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale() );
+    @Test
+    void getPaymentFormLogo_nominal() {
+        // given: the configuration is correct
+        PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
+        doReturn("64").when(config).get("logo.height");
+        doReturn("64").when(config).get("logo.width");
+        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
-            // when: calling method getPaymentFormLogo()
-            PaymentFormLogoResponse logoResponse = testService.getPaymentFormLogo( paymentFormLogoRequest );
+        // when: calling method getPaymentFormLogo()
+        PaymentFormLogoResponse logoResponse = testService.getPaymentFormLogo(paymentFormLogoRequest);
 
-            // then:
-            assertTrue( logoResponse instanceof PaymentFormLogoResponseFile);
-            assertEquals( 64, ((PaymentFormLogoResponseFile) logoResponse).getHeight() );
-            assertEquals( 64, ((PaymentFormLogoResponseFile) logoResponse).getWidth() );
-            assertTrue( ((PaymentFormLogoResponseFile) logoResponse).getTitle().contains("CVConnect") );
-            assertTrue( ((PaymentFormLogoResponseFile) logoResponse).getAlt().contains("CVConnect") );
-        }
+        // then:
+        assertTrue(logoResponse instanceof PaymentFormLogoResponseFile);
+        assertEquals(64, ((PaymentFormLogoResponseFile) logoResponse).getHeight());
+        assertEquals(64, ((PaymentFormLogoResponseFile) logoResponse).getWidth());
+        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getTitle().contains("CVConnect"));
+        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getAlt().contains("CVConnect"));
+    }
 
-        @Test
-        void getPaymentFormLogo_wrongHeight(){
-            // given: the logo.height config value is incorrect (not an integer)
-            PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
-            doReturn("abc").when( config ).get("logo.height");
-            doReturn("64").when( config ).get("logo.width");
-            doReturn( "CVConnect" ).when( i18n ).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale() );
+    @Test
+    void getPaymentFormLogo_wrongHeight() {
+        // given: the logo.height config value is incorrect (not an integer)
+        PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
+        doReturn("abc").when(config).get("logo.height");
+        doReturn("64").when(config).get("logo.width");
+        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
-            // when: calling method getPaymentFormLogo()
-            assertThrows( PluginException.class, () -> testService.getPaymentFormLogo( paymentFormLogoRequest ) );
-        }
+        // when: calling method getPaymentFormLogo()
+        assertThrows(PluginException.class, () -> testService.getPaymentFormLogo(paymentFormLogoRequest));
+    }
 
-        @Test
-        void getPaymentFormLogo_wrongWidth(){
-            // given: the logo.height config value is incorrect (not an integer)
-            PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
-            doReturn("64").when( config ).get("logo.height");
-            doReturn("abc").when( config ).get("logo.width");
-            doReturn( "CVConnect" ).when( i18n ).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale() );
+    @Test
+    void getPaymentFormLogo_wrongWidth() {
+        // given: the logo.height config value is incorrect (not an integer)
+        PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
+        doReturn("64").when(config).get("logo.height");
+        doReturn("abc").when(config).get("logo.width");
+        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
-            // when: calling method getPaymentFormLogo()
-            assertThrows( PluginException.class, () -> testService.getPaymentFormLogo( paymentFormLogoRequest ) );
-        }
+        // when: calling method getPaymentFormLogo()
+        assertThrows(PluginException.class, () -> testService.getPaymentFormLogo(paymentFormLogoRequest));
+    }
 
-        @Test
-        void getLogo_nominal(){
-            // given: a valid configuration
-            doReturn("test_logo.png").when( config ).get("logo.filename");
-            doReturn("png").when( config ).get("logo.format");
-            doReturn("image/png").when( config ).get("logo.contentType");
+    @Test
+    void getLogo_nominal() {
+        // given: a valid configuration
+        doReturn("test_logo.png").when(config).get("logo.filename");
+        doReturn("png").when(config).get("logo.format");
+        doReturn("image/png").when(config).get("logo.contentType");
 
-            // when: calling method getLogo()
-            PaymentFormLogo paymentFormLogo = testService.getLogo( "whatever", Locale.getDefault() );
+        // when: calling method getLogo()
+        PaymentFormLogo paymentFormLogo = testService.getLogo("whatever", Locale.getDefault());
 
-            // then:
-            assertNotNull( paymentFormLogo.getContentType() );
-            assertNotNull( paymentFormLogo.getFile() );
-        }
+        // then:
+        assertNotNull(paymentFormLogo.getContentType());
+        assertNotNull(paymentFormLogo.getFile());
+    }
 
-        @Test
-        void getLogo_wrongFilename(){
-            // given: a valid configuration
-            doReturn("does_not_exist.png").when( config ).get("logo.filename");
-            doReturn("png").when( config ).get("logo.format");
-            doReturn("image/png").when( config ).get("logo.contentType");
+    @Test
+    void getLogo_wrongFilename() {
+        // given: a valid configuration
+        doReturn("does_not_exist.png").when(config).get("logo.filename");
+        doReturn("png").when(config).get("logo.format");
+        doReturn("image/png").when(config).get("logo.contentType");
 
-            // when: calling method getLogo(), then: an exception is thrown
-            assertThrows( PluginException.class, () -> testService.getLogo( "whatever", Locale.getDefault() ) );
-        }
-
-
+        // when: calling method getLogo(), then: an exception is thrown
+        assertThrows(PluginException.class, () -> testService.getLogo("whatever", Locale.getDefault()));
+    }
 
 
 }

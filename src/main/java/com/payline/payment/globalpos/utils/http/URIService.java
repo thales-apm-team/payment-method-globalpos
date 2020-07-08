@@ -30,6 +30,7 @@ public class URIService {
 
     /**
      * Create the URL with all values needed to create a transaction
+     *
      * @param baseUrl
      * @param guid
      * @param storeId
@@ -54,6 +55,7 @@ public class URIService {
 
     /**
      * Create the URL with all values needed to add a payment ticket to the transaction
+     *
      * @param baseUrl
      * @param guid
      * @param numTransac
@@ -75,14 +77,13 @@ public class URIService {
     }
 
     /**
-     *
      * @param baseUrl
      * @param guid
      * @param numTransac
      * @param id
      * @return
      */
-    public static URI createSetAnnulTitreTransactionURL(String baseUrl, String guid, String numTransac, String id){
+    public static URI createSetAnnulTitreTransactionURL(String baseUrl, String guid, String numTransac, String id) {
         try {
             URIBuilder builder = new URIBuilder(baseUrl);
             builder.setPathSegments(BASE_PATH, SET_ANNUL_TITRE_TRANSACT_PATH);
@@ -98,6 +99,7 @@ public class URIService {
 
     /**
      * Create the URL with all values needed to end a transaction (finalize or cancel)
+     *
      * @param baseUrl
      * @param guid
      * @param numTransac

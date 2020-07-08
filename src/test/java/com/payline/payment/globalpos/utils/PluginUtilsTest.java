@@ -1,7 +1,6 @@
 package com.payline.payment.globalpos.utils;
 
 import com.payline.payment.globalpos.exception.InvalidDataException;
-import org.apache.bcel.generic.PUSH;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

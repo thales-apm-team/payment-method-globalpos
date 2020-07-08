@@ -49,23 +49,23 @@ public abstract class LogoPaymentFormConfigurationService implements PaymentForm
     @Override
     public PaymentFormLogo getLogo(String paymentMethodIdentifier, Locale locale) {
         String filename = config.get("logo.filename");
-        if (PluginUtils.isEmpty(filename)){
+        if (PluginUtils.isEmpty(filename)) {
             LOGGER.error("No file name for the logo");
             throw new PluginException("Plugin error: No file name for the logo");
         }
         String format = config.get("logo.format");
-        if (PluginUtils.isEmpty(format)){
+        if (PluginUtils.isEmpty(format)) {
             LOGGER.error("no format defined for file {}", filename);
             throw new PluginException("Plugin error: No file format for the logo");
         }
 
         String contentType = config.get("logo.contentType");
-        if (PluginUtils.isEmpty(format)){
+        if (PluginUtils.isEmpty(format)) {
             LOGGER.error("no content type defined for file {}", filename);
             throw new PluginException("Plugin error: No content type for the logo");
         }
 
-        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(filename)){
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(filename)) {
             if (input == null) {
                 LOGGER.error("Unable to load file {}", filename);
                 throw new PluginException("Plugin error: unable to load the logo file");

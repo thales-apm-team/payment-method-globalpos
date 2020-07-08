@@ -46,7 +46,7 @@ public class I18nService {
     }
 
     // If ever needed, implement getMessage( String, Locale, String... ) to insert values into the translation messages
-    public String getMessage(final String key, final Locale locale, String ... s) {
+    public String getMessage(final String key, final Locale locale, String... s) {
         ResourceBundle messages = ResourceBundle.getBundle("messages", locale);
         try {
 
