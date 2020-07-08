@@ -18,6 +18,7 @@ import com.payline.pmapi.bean.paymentform.request.PaymentFormConfigurationReques
 import com.payline.pmapi.bean.paymentform.request.PaymentFormLogoRequest;
 import com.payline.pmapi.bean.refund.request.RefundRequest;
 import com.payline.pmapi.bean.reset.request.ResetRequest;
+import lombok.Getter;
 import org.apache.http.Header;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -37,25 +38,35 @@ import static org.mockito.Mockito.mock;
 
 public class MockUtils {
 
-
+    @Getter
     private static String TRANSACTIONID = "123456789012345678901";
+    @Getter
     private static String PARTNER_TRANSACTIONID = "1234";
 
+    @Getter
     private static String amountValue = "1000";
+    @Getter
     private static int refundAmount = 1;
 
-
+    @Getter
     static final Date date = new Date();
+    @Getter
     static final String dateFormat = "yyyy-MM-dd";
+    @Getter
     static LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
     /*------------------------------------------------------------------------------------------------------------------*/
 
+    @Getter
     private static final String guid = "819ed9dc7f85075e771043072a6e8681";
+    @Getter
     private static final String codeMagasin = "ABBEV";
+    @Getter
     private static final String numeroCaisse = "Payline";
+    @Getter
     private static final String titre = "25394000194000103576958078172010123902001000";
 
+    @Getter
     private static final String numTransac = "5e7db72846ebd";
 
 
@@ -606,49 +617,5 @@ public class MockUtils {
                 "  <message>La transaction actuelle n'existe pas</message>\n" +
                 "  <detail/>\n" +
                 "</xml>";
-    }
-
-    public static String getTRANSACTIONID() {
-        return TRANSACTIONID;
-    }
-
-    public static String getAmountValue() {
-        return amountValue;
-    }
-
-    public static int getRefundAmount() {
-        return refundAmount;
-    }
-
-    public static Date getDate() {
-        return date;
-    }
-
-    public static String getDateFormat() {
-        return dateFormat;
-    }
-
-    public static LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
-    public static String getGuid() {
-        return guid;
-    }
-
-    public static String getCodeMagasin() {
-        return codeMagasin;
-    }
-
-    public static String getNumeroCaisse() {
-        return numeroCaisse;
-    }
-
-    public static String getTitre() {
-        return titre;
-    }
-
-    public static String getNumTransac() {
-        return numTransac;
     }
 }
