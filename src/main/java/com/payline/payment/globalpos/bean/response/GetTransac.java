@@ -4,23 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.payline.payment.globalpos.exception.InvalidDataException;
+import lombok.Getter;
 
 import java.io.IOException;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GetTransac {
+    @Getter
     private String codeErreur;
+    @Getter
     @JsonProperty("NumTransac")
     private String numTransac;
     private static XmlMapper xmlMapper = new XmlMapper();
-
-    public String getCodeErreur() {
-        return codeErreur;
-    }
-
-    public String getNumTransac() {
-        return numTransac;
-    }
 
     public static GetTransac fromXml(String xml) {
         try {
