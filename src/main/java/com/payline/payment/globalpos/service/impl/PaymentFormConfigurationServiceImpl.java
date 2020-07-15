@@ -1,11 +1,11 @@
 package com.payline.payment.globalpos.service.impl;
 
-import com.payline.payment.globalpos.service.LogoPaymentFormConfigurationService;
-import com.payline.payment.globalpos.utils.i18n.I18nService;
 import com.payline.pmapi.bean.paymentform.bean.form.NoFieldForm;
 import com.payline.pmapi.bean.paymentform.request.PaymentFormConfigurationRequest;
 import com.payline.pmapi.bean.paymentform.response.configuration.PaymentFormConfigurationResponse;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
+import com.toolbox.service.LogoPaymentFormConfigurationService;
+import com.toolbox.utils.i18n.I18nService;
 
 public class PaymentFormConfigurationServiceImpl extends LogoPaymentFormConfigurationService {
 

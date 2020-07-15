@@ -4,7 +4,6 @@ import com.payline.payment.globalpos.utils.constant.ContractConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.PartnerConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.RequestContextKeys;
-import com.payline.payment.globalpos.utils.http.StringResponse;
 import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.Buyer;
 import com.payline.pmapi.bean.configuration.PartnerConfiguration;
@@ -18,6 +17,7 @@ import com.payline.pmapi.bean.paymentform.request.PaymentFormConfigurationReques
 import com.payline.pmapi.bean.paymentform.request.PaymentFormLogoRequest;
 import com.payline.pmapi.bean.refund.request.RefundRequest;
 import com.payline.pmapi.bean.reset.request.ResetRequest;
+import com.toolbox.utils.http.StringResponse;
 import lombok.Getter;
 import org.apache.http.Header;
 import org.apache.http.ProtocolVersion;

@@ -1,19 +1,15 @@
 package com.payline.payment.globalpos.service.impl;
 
 import com.payline.payment.globalpos.bean.AmountParse;
-import com.payline.payment.globalpos.bean.configuration.RequestConfiguration;
 import com.payline.payment.globalpos.bean.response.APIResponseError;
 import com.payline.payment.globalpos.bean.response.GetTitreDetailTransac;
 import com.payline.payment.globalpos.bean.response.GetTransac;
 import com.payline.payment.globalpos.bean.response.SetFinTransac;
-import com.payline.payment.globalpos.exception.InvalidDataException;
-import com.payline.payment.globalpos.exception.PluginException;
 import com.payline.payment.globalpos.service.HttpService;
-import com.payline.payment.globalpos.utils.PluginUtils;
+import com.payline.payment.globalpos.utils.MdpUtils;
 import com.payline.payment.globalpos.utils.constant.ContractConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.RequestContextKeys;
-import com.payline.payment.globalpos.utils.i18n.I18nService;
 import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.bean.payment.RequestContext;
@@ -34,6 +30,11 @@ import com.payline.pmapi.bean.paymentform.response.configuration.PaymentFormConf
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
 import com.payline.pmapi.logger.LogManager;
 import com.payline.pmapi.service.PaymentService;
+import com.toolbox.bean.configuration.RequestConfiguration;
+import com.toolbox.exception.InvalidDataException;
+import com.toolbox.exception.PluginException;
+import com.toolbox.utils.PluginUtils;
+import com.toolbox.utils.i18n.I18nService;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
@@ -452,7 +453,7 @@ public class PaymentServiceImpl implements PaymentService {
         LOGGER.info("Failure While calling API:{}", response);
         return PaymentResponseFailure.PaymentResponseFailureBuilder.aPaymentResponseFailure()
                 .withErrorCode(PluginUtils.truncate(response.getMessage(), 50))
-                .withFailureCause(PluginUtils.getFailureCause(response.getError()))
+                .withFailureCause(MdpUtils.getFailureCause(response.getError()))
                 .build();
     }
 }

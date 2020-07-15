@@ -1,7 +1,5 @@
 package com.payline.payment.globalpos.service.impl;
 
-import com.payline.payment.globalpos.bean.configuration.RequestConfiguration;
-import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.service.HttpService;
 import com.payline.pmapi.bean.notification.request.NotificationRequest;
 import com.payline.pmapi.bean.notification.response.NotificationResponse;
@@ -9,6 +7,8 @@ import com.payline.pmapi.bean.notification.response.impl.IgnoreNotificationRespo
 import com.payline.pmapi.bean.payment.request.NotifyTransactionStatusRequest;
 import com.payline.pmapi.logger.LogManager;
 import com.payline.pmapi.service.NotificationService;
+import com.toolbox.bean.configuration.RequestConfiguration;
+import com.toolbox.exception.InvalidDataException;
 import org.apache.logging.log4j.Logger;
 
 public class NotificationServiceImpl implements NotificationService {

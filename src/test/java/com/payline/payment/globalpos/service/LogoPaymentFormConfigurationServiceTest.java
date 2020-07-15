@@ -1,15 +1,16 @@
 package com.payline.payment.globalpos.service;
 
 import com.payline.payment.globalpos.MockUtils;
-import com.payline.payment.globalpos.exception.PluginException;
-import com.payline.payment.globalpos.utils.i18n.I18nService;
-import com.payline.payment.globalpos.utils.properties.ConfigProperties;
 import com.payline.pmapi.bean.paymentform.bean.PaymentFormLogo;
 import com.payline.pmapi.bean.paymentform.request.PaymentFormConfigurationRequest;
 import com.payline.pmapi.bean.paymentform.request.PaymentFormLogoRequest;
 import com.payline.pmapi.bean.paymentform.response.configuration.PaymentFormConfigurationResponse;
 import com.payline.pmapi.bean.paymentform.response.logo.PaymentFormLogoResponse;
 import com.payline.pmapi.bean.paymentform.response.logo.impl.PaymentFormLogoResponseFile;
+import com.toolbox.exception.PluginException;
+import com.toolbox.service.LogoPaymentFormConfigurationService;
+import com.toolbox.utils.i18n.I18nService;
+import com.toolbox.utils.properties.LogoProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,7 +41,7 @@ class LogoPaymentFormConfigurationServiceTest {
     @Mock
     private I18nService i18n;
     @Mock
-    private ConfigProperties config;
+    private LogoProperties config;
 
     @BeforeEach
     void setup() {
@@ -52,19 +53,23 @@ class LogoPaymentFormConfigurationServiceTest {
     void getPaymentFormLogo_nominal() {
         // given: the configuration is correct
         PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
-        doReturn("64").when(config).get("logo.height");
-        doReturn("64").when(config).get("logo.width");
-        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
+        System.out.println(config.get("logo.height"));
+        System.out.println(config.get("logo.filename"));
+        System.out.println(config.get("http.retries"));
+        doReturn("264").when(config).get("logo.height");
+        doReturn("226").when(config).get("logo.width");
+        doReturn("globalpos").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
         // when: calling method getPaymentFormLogo()
         PaymentFormLogoResponse logoResponse = testService.getPaymentFormLogo(paymentFormLogoRequest);
 
         // then:
         assertTrue(logoResponse instanceof PaymentFormLogoResponseFile);
-        assertEquals(64, ((PaymentFormLogoResponseFile) logoResponse).getHeight());
-        assertEquals(64, ((PaymentFormLogoResponseFile) logoResponse).getWidth());
-        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getTitle().contains("CVConnect"));
-        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getAlt().contains("CVConnect"));
+        assertEquals(264, ((PaymentFormLogoResponseFile) logoResponse).getHeight());
+        assertEquals(226, ((PaymentFormLogoResponseFile) logoResponse).getWidth());
+        assertEquals(Integer.parseInt(config.get("logo.height")), ((PaymentFormLogoResponseFile) logoResponse).getHeight());
+        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getTitle().contains("globalpos"));
+        assertTrue(((PaymentFormLogoResponseFile) logoResponse).getAlt().contains("globalpos"));
     }
 
     @Test
@@ -73,7 +78,7 @@ class LogoPaymentFormConfigurationServiceTest {
         PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
         doReturn("abc").when(config).get("logo.height");
         doReturn("64").when(config).get("logo.width");
-        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
+        doReturn("globalpos").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
         // when: calling method getPaymentFormLogo()
         assertThrows(PluginException.class, () -> testService.getPaymentFormLogo(paymentFormLogoRequest));
@@ -85,7 +90,7 @@ class LogoPaymentFormConfigurationServiceTest {
         PaymentFormLogoRequest paymentFormLogoRequest = MockUtils.aPaymentFormLogoRequest();
         doReturn("64").when(config).get("logo.height");
         doReturn("abc").when(config).get("logo.width");
-        doReturn("CVConnect").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
+        doReturn("globalpos").when(i18n).getMessage("paymentMethod.name", paymentFormLogoRequest.getLocale());
 
         // when: calling method getPaymentFormLogo()
         assertThrows(PluginException.class, () -> testService.getPaymentFormLogo(paymentFormLogoRequest));

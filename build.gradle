@@ -49,6 +49,11 @@ dependencies {
 
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+//    implementation name: 'com.libs/library-1.0.0.0.jar'
+//    compile files('library-1.0.0.0.jar')
+//    implementation group: 'com.library', name: 'library', version: '1.0.0.0'
+    implementation group: 'com.plugin', name: 'toolbox', version: '1.0.0'
 }
 
 dependencyCheck {
@@ -67,6 +72,13 @@ shadowJar {
         exclude(dependency("org.junit.jupiter:junit-jupiter-api:$jupiterVersion"))
     }
 }
+
+//repositories {
+//    flatDir {
+//        dirs 'libs'
+//        dirs '~/Documents/Monext/workspace/library/build/libs'
+//    }
+//}
 
 jar {
     manifest {

@@ -1,12 +1,12 @@
 package com.payline.payment.globalpos.service.impl;
 
 import com.payline.payment.globalpos.MockUtils;
-import com.payline.payment.globalpos.bean.configuration.RequestConfiguration;
 import com.payline.payment.globalpos.service.HttpService;
-import com.payline.payment.globalpos.utils.properties.ReleaseProperties;
 import com.payline.pmapi.bean.configuration.ReleaseInformation;
 import com.payline.pmapi.bean.configuration.parameter.AbstractParameter;
 import com.payline.pmapi.bean.configuration.request.ContractParametersCheckRequest;
+import com.toolbox.bean.configuration.RequestConfiguration;
+import com.toolbox.utils.properties.ReleaseProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

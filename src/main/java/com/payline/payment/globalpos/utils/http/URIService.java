@@ -1,6 +1,6 @@
 package com.payline.payment.globalpos.utils.http;
 
-import com.payline.payment.globalpos.exception.InvalidDataException;
+import com.toolbox.exception.InvalidDataException;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.net.MalformedURLException;

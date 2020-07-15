@@ -2,8 +2,6 @@ package com.payline.payment.globalpos.service.impl;
 
 import com.payline.payment.globalpos.MockUtils;
 import com.payline.payment.globalpos.bean.response.GetTitreDetailTransac;
-import com.payline.payment.globalpos.exception.InvalidDataException;
-import com.payline.payment.globalpos.exception.PluginException;
 import com.payline.payment.globalpos.service.HttpService;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.bean.payment.PaymentFormContext;
@@ -19,6 +17,8 @@ import com.payline.pmapi.bean.paymentform.bean.field.PaymentFormInputFieldText;
 import com.payline.pmapi.bean.paymentform.bean.form.CardForm;
 import com.payline.pmapi.bean.paymentform.bean.form.CustomForm;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
+import com.toolbox.exception.InvalidDataException;
+import com.toolbox.exception.PluginException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
