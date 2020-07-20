@@ -52,7 +52,8 @@ class NotificationServiceImplTest {
 
         service.notifyTransactionStatus(request);
         Mockito.verify(httpService, Mockito.times(1))
-                .setFinTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.COMMIT));
+                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.COMMIT.name()), eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+
     }
 
     @Test
@@ -63,6 +64,6 @@ class NotificationServiceImplTest {
 
         service.notifyTransactionStatus(request);
         Mockito.verify(httpService, Mockito.times(1))
-                .setFinTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.ROLLBACK));
+                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.ROLLBACK.name()),eq(HttpService.TransactionType.FINALISE_TRANSACTION));
     }
 }
