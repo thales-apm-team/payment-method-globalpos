@@ -7,6 +7,7 @@ import com.payline.payment.globalpos.service.impl.PaymentServiceImpl;
 import com.payline.payment.globalpos.utils.constant.ContractConfigurationKeys;
 import com.payline.payment.globalpos.utils.http.HttpClient;
 import com.payline.payment.globalpos.utils.http.StringResponse;
+import com.payline.payment.globalpos.utils.http.TransactionType;
 import com.payline.pmapi.bean.payment.ContractProperty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,9 +133,9 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String response = httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), HttpService.TransactionType.DETAIL_TRANSACTION);
+        String response = httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), TransactionType.DETAIL_TRANSACTION);
 
-        Assertions.assertDoesNotThrow(() -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), HttpService.TransactionType.DETAIL_TRANSACTION));
+        Assertions.assertDoesNotThrow(() -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), TransactionType.DETAIL_TRANSACTION));
 
         Assertions.assertEquals(response, stringResponse.getContent());
 
@@ -149,7 +150,7 @@ class HttpServiceTest {
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), HttpService.TransactionType.DETAIL_TRANSACTION));
+                () -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), MockUtils.getTitre(), TransactionType.DETAIL_TRANSACTION));
 
         Assertions.assertEquals("DETAIL_TRANSACTION wrong data", thrown.getMessage());
 
@@ -163,9 +164,9 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String response = httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), HttpService.TransactionType.FINALISE_TRANSACTION);
+        String response = httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), TransactionType.FINALISE_TRANSACTION);
 
-        Assertions.assertDoesNotThrow(() -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), HttpService.TransactionType.FINALISE_TRANSACTION));
+        Assertions.assertDoesNotThrow(() -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), TransactionType.FINALISE_TRANSACTION));
 
         Assertions.assertEquals(response, stringResponse.getContent());
 
@@ -180,7 +181,7 @@ class HttpServiceTest {
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), HttpService.TransactionType.FINALISE_TRANSACTION));
+                () -> httpService.manageTransact(configuration, MockUtils.getNumTransac(), PaymentServiceImpl.STATUS.COMMIT.name(), TransactionType.FINALISE_TRANSACTION));
 
         Assertions.assertEquals("FINALISE_TRANSACTION wrong data", thrown.getMessage());
     }
@@ -193,7 +194,7 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String s = httpService.manageTransact(configuration, MockUtils.getNumTransac(), "123", HttpService.TransactionType.CANCEL_TRANSACTION);
+        String s = httpService.manageTransact(configuration, MockUtils.getNumTransac(), "123", TransactionType.CANCEL_TRANSACTION);
 
         Assertions.assertNotNull(s);
         Assertions.assertEquals("true", s);

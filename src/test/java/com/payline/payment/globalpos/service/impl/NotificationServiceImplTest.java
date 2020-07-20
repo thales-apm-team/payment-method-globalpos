@@ -2,6 +2,7 @@ package com.payline.payment.globalpos.service.impl;
 
 import com.payline.payment.globalpos.MockUtils;
 import com.payline.payment.globalpos.service.HttpService;
+import com.payline.payment.globalpos.utils.http.TransactionType;
 import com.payline.pmapi.bean.notification.response.impl.IgnoreNotificationResponse;
 import com.payline.pmapi.bean.payment.request.NotifyTransactionStatusRequest;
 import org.junit.jupiter.api.Assertions;
@@ -52,7 +53,7 @@ class NotificationServiceImplTest {
 
         service.notifyTransactionStatus(request);
         Mockito.verify(httpService, Mockito.times(1))
-                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.COMMIT.name()), eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.COMMIT.name()), eq(TransactionType.FINALISE_TRANSACTION));
 
     }
 
@@ -64,6 +65,6 @@ class NotificationServiceImplTest {
 
         service.notifyTransactionStatus(request);
         Mockito.verify(httpService, Mockito.times(1))
-                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.ROLLBACK.name()),eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+                .manageTransact(any(), eq(partnerTransactionId), eq(PaymentServiceImpl.STATUS.ROLLBACK.name()),eq(TransactionType.FINALISE_TRANSACTION));
     }
 }

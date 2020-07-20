@@ -10,6 +10,7 @@ import com.payline.payment.globalpos.utils.http.StringResponse;
 import com.payline.payment.globalpos.utils.http.URIService;
 import com.payline.pmapi.logger.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.payline.payment.globalpos.utils.http.TransactionType;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -77,12 +78,6 @@ public class HttpService {
         }
 
         return response.getContent();
-    }
-
-    public enum TransactionType {
-        FINALISE_TRANSACTION,
-        CANCEL_TRANSACTION,
-        DETAIL_TRANSACTION
     }
 
     public String manageTransact(RequestConfiguration configuration, String numTransact, String urlElement, TransactionType transactionType){

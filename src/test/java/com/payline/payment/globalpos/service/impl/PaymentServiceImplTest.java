@@ -5,6 +5,7 @@ import com.payline.payment.globalpos.bean.response.GetTitreDetailTransac;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.exception.PluginException;
 import com.payline.payment.globalpos.service.HttpService;
+import com.payline.payment.globalpos.utils.http.TransactionType;
 import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.bean.payment.PaymentFormContext;
@@ -117,9 +118,9 @@ class PaymentServiceImplTest {
                 .withRequestContext(MockUtils.aRequestContextBuilderStep(STEP2, MockUtils.getNumTransac()).build())
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
-        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
 
-        Mockito.doReturn(MockUtils.setFinTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+        Mockito.doReturn(MockUtils.setFinTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.FINALISE_TRANSACTION));
 
         PaymentResponse response = service.step2(request);
 
@@ -136,8 +137,8 @@ class PaymentServiceImplTest {
                 .withRequestContext(MockUtils.aRequestContextBuilderStep(STEP2, MockUtils.getNumTransac()).build())
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
-        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(),eq(HttpService.TransactionType.DETAIL_TRANSACTION));
-        Mockito.doReturn("true").when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.CANCEL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(),eq(TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn("true").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
         PaymentResponse response = service.step2(request);
 
         Assertions.assertEquals(PaymentResponseFormUpdated.class, response.getClass());
@@ -179,9 +180,9 @@ class PaymentServiceImplTest {
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
 
-        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
 
-        Mockito.doReturn("false").when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.CANCEL_TRANSACTION));
+        Mockito.doReturn("false").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
         PaymentResponse response = service.step2(request);
 
         Assertions.assertEquals("GlobalPos API is unable to cancel the ticket",((PaymentResponseFailure)response).getErrorCode());
@@ -201,7 +202,7 @@ class PaymentServiceImplTest {
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
 
-        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
 
         PaymentResponse response = service.step2(request);
 
@@ -217,7 +218,7 @@ class PaymentServiceImplTest {
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
 
-        Mockito.doReturn(MockUtils.getTitreTransacKO()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacKO()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
         PaymentResponse response = service.step2(request);
 
         Assertions.assertEquals("La transaction actuelle n'existe pas",((PaymentResponseFailure)response).getErrorCode());
@@ -237,7 +238,7 @@ class PaymentServiceImplTest {
                 .withPaymentFormContext(MockUtils.aPaymentFormContextStep2(MockUtils.getTitre()))
                 .build();
 
-        Mockito.doReturn(MockUtils.getTitreTransacWrongAmount()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.DETAIL_TRANSACTION));
+        Mockito.doReturn(MockUtils.getTitreTransacWrongAmount()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
 
         assertThrows(NumberFormatException.class, () -> service.step2(request));
 
@@ -269,7 +270,7 @@ class PaymentServiceImplTest {
                 .withRequestContext(MockUtils.aRequestContextBuilderStep(STEP3, MockUtils.getNumTransac()).build())
                 .build();
 
-        Mockito.doReturn(MockUtils.setFinTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+        Mockito.doReturn(MockUtils.setFinTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.FINALISE_TRANSACTION));
         PaymentResponse response = service.step3(request);
 
         Assertions.assertEquals(PaymentResponseDoPayment.class, response.getClass());
@@ -289,7 +290,7 @@ class PaymentServiceImplTest {
                 .withRequestContext(MockUtils.aRequestContextBuilderStep(STEP3, MockUtils.getNumTransac()).build())
                 .build();
 
-        Mockito.doReturn(MockUtils.setFinTransacKO()).when(httpService).manageTransact(any(), any(), any(),eq(HttpService.TransactionType.FINALISE_TRANSACTION));
+        Mockito.doReturn(MockUtils.setFinTransacKO()).when(httpService).manageTransact(any(), any(), any(),eq(TransactionType.FINALISE_TRANSACTION));
         Assertions.assertThrows(PluginException.class, () -> service.step3(request));
     }
 
