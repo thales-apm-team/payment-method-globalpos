@@ -64,8 +64,8 @@ class PaymentServiceImplTest {
         Mockito.doReturn(MockUtils.getTransacOK()).when(httpService).getTransact(any(), any(), any(), any(), any());
         PaymentResponse response = service.step1(request);
 
-       Assertions.assertEquals("Entrez votre titre",((PaymentFormConfigurationResponseSpecific)((PaymentResponseFormUpdated)response).getPaymentFormConfigurationResponse()).getPaymentForm().getDescription());
         Assertions.assertEquals(PaymentResponseFormUpdated.class, response.getClass());
+        Assertions.assertEquals("Entrez votre titre",((PaymentFormConfigurationResponseSpecific)((PaymentResponseFormUpdated)response).getPaymentFormConfigurationResponse()).getPaymentForm().getDescription());
     }
 
     @Test
@@ -74,8 +74,8 @@ class PaymentServiceImplTest {
         Mockito.doReturn(MockUtils.getTransacKO()).when(httpService).getTransact(any(), any(), any(), any(), any());
         PaymentResponse response = service.step1(request);
 
-        Assertions.assertEquals("Magasin inconnu de l'enseigne",((PaymentResponseFailure)response).getErrorCode());
         Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+        Assertions.assertEquals("Magasin inconnu de l'enseigne",((PaymentResponseFailure)response).getErrorCode());
     }
 
     @Test
@@ -84,8 +84,8 @@ class PaymentServiceImplTest {
         Mockito.doReturn(MockUtils.getTransacKO60()).when(httpService).getTransact(any(), any(), any(), any(), any());
         PaymentResponse response = service.step1(request);
 
-        Assertions.assertEquals("step1KOError60",((PaymentResponseFailure)response).getErrorCode());
         Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+        Assertions.assertEquals("step1KOError60",((PaymentResponseFailure)response).getErrorCode());
     }
 
     @Test
@@ -94,8 +94,8 @@ class PaymentServiceImplTest {
         Mockito.doReturn(MockUtils.getTransacKO30()).when(httpService).getTransact(any(), any(), any(), any(), any());
         PaymentResponse response = service.step1(request);
 
-        Assertions.assertEquals("step1KOError30",((PaymentResponseFailure)response).getErrorCode());
         Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+        Assertions.assertEquals("step1KOError30",((PaymentResponseFailure)response).getErrorCode());
     }
 
     @Test
@@ -124,10 +124,10 @@ class PaymentServiceImplTest {
 
         PaymentResponse response = service.step2(request);
 
+        Assertions.assertEquals(PaymentResponseSuccess.class, response.getClass());
+
         Assertions.assertEquals("5e7db72846ebd",((PaymentResponseSuccess)response).getPartnerTransactionId());
         Assertions.assertEquals("1",((PaymentResponseSuccess)response).getStatusCode());
-
-        Assertions.assertEquals(PaymentResponseSuccess.class, response.getClass());
     }
 
     @Test
@@ -156,7 +156,7 @@ class PaymentServiceImplTest {
         Assertions.assertEquals(2, customForm.getCustomFields().size());
 
         Assertions.assertEquals(PaymentFormDisplayFieldText.class, customForm.getCustomFields().get(0).getClass());
-        Assertions.assertEquals("Vous ne pouvez pas utiliser ce bon pour une commande inférieure a 5.00 EUR", ((PaymentFormDisplayFieldText)customForm.getCustomFields().get(0)).getContent());
+        Assertions.assertEquals("Vous ne pouvez pas utiliser ce bon pour une commande inférieure a 5.00 €", ((PaymentFormDisplayFieldText)customForm.getCustomFields().get(0)).getContent());
 
         Assertions.assertEquals(PaymentFormInputFieldText.class, customForm.getCustomFields().get(1).getClass());
         Assertions.assertEquals("Format de code barre incorrect", ((PaymentFormInputFieldText)customForm.getCustomFields().get(1)).getValidationErrorMessage());
@@ -166,9 +166,6 @@ class PaymentServiceImplTest {
         Assertions.assertEquals("", ((PaymentFormInputFieldText)customForm.getCustomFields().get(1)).getPlaceholder());
         Assertions.assertEquals(InputType.NUMBER, ((PaymentFormInputFieldText)customForm.getCustomFields().get(1)).getInputType());
         Assertions.assertEquals(FieldIcon.CARD, ((PaymentFormInputFieldText)customForm.getCustomFields().get(1)).getFieldIcon());
-
-
-        //Entrez votre titre
 
     }
 
@@ -185,13 +182,14 @@ class PaymentServiceImplTest {
         Mockito.doReturn("false").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
         PaymentResponse response = service.step2(request);
 
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+
         Assertions.assertEquals("GlobalPos API is unable to cancel the ticket",((PaymentResponseFailure)response).getErrorCode());
         Assertions.assertEquals(MockUtils.getNumTransac(),((PaymentResponseFailure)response).getPartnerTransactionId());
         Assertions.assertNull(((PaymentResponseFailure)response).getTransactionDetails());
         Assertions.assertNull(((PaymentResponseFailure)response).getTransactionAdditionalData());
         Assertions.assertNull(((PaymentResponseFailure)response).getWallet());
 
-        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
     }
 
     @Test
@@ -206,8 +204,8 @@ class PaymentServiceImplTest {
 
         PaymentResponse response = service.step2(request);
 
-        Assertions.assertEquals(MockUtils.aCustomForm().getCustomFields(), ((CustomForm)((PaymentFormConfigurationResponseSpecific)((PaymentResponseFormUpdated)response).getPaymentFormConfigurationResponse()).getPaymentForm()).getCustomFields());
         Assertions.assertEquals(PaymentResponseFormUpdated.class, response.getClass());
+        Assertions.assertEquals(MockUtils.aCustomForm().getCustomFields(), ((CustomForm)((PaymentFormConfigurationResponseSpecific)((PaymentResponseFormUpdated)response).getPaymentFormConfigurationResponse()).getPaymentForm()).getCustomFields());
     }
 
     @Test
@@ -221,14 +219,14 @@ class PaymentServiceImplTest {
         Mockito.doReturn(MockUtils.getTitreTransacKO()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
         PaymentResponse response = service.step2(request);
 
+        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
+
         Assertions.assertEquals("La transaction actuelle n'existe pas",((PaymentResponseFailure)response).getErrorCode());
         Assertions.assertNull(((PaymentResponseFailure)response).getPartnerTransactionId());
         Assertions.assertNull(((PaymentResponseFailure)response).getTransactionDetails());
         Assertions.assertNull(((PaymentResponseFailure)response).getTransactionAdditionalData());
         Assertions.assertNull(((PaymentResponseFailure)response).getWallet());
 
-
-        Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
     }
 
     @Test

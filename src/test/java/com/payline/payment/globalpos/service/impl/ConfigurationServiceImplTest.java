@@ -94,7 +94,7 @@ class ConfigurationServiceImplTest {
         String name = configurationServiceImpl.getName(Locale.getDefault());
 
         // then: the method returns the name
-        assertEquals("globalpos", name);
         assertNotNull(name);
+        assertEquals("globalpos", name);
     }
 }
