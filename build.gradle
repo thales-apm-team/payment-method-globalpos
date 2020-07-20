@@ -110,6 +110,12 @@ task testJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     configurations = [project.configurations.fatJarTest]
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
 test {
     useJUnitPlatform()
     exclude('**/*IT.class')
