@@ -35,7 +35,7 @@ pipeline {
         stage('Test') {
             steps {
                 gitlabCommitStatus(name: "Test") {
-                    sh './gradlew test --continue'
+                    sh './gradlew test jacocoTestReport --continue'
                 }
             }
             post {
