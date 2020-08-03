@@ -1,6 +1,5 @@
 package com.payline.payment.globalpos.service.impl;
 
-import com.payline.payment.globalpos.utils.AmountParse;
 import com.payline.payment.globalpos.bean.configuration.RequestConfiguration;
 import com.payline.payment.globalpos.bean.response.APIResponseError;
 import com.payline.payment.globalpos.bean.response.GetTitreDetailTransac;
@@ -9,6 +8,7 @@ import com.payline.payment.globalpos.bean.response.SetFinTransac;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.exception.PluginException;
 import com.payline.payment.globalpos.service.HttpService;
+import com.payline.payment.globalpos.utils.AmountParse;
 import com.payline.payment.globalpos.utils.PluginUtils;
 import com.payline.payment.globalpos.utils.constant.ContractConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
@@ -332,6 +332,8 @@ public class PaymentServiceImpl implements PaymentService {
         listForm.add(createInputFieldText(locale));
 
         CustomForm customForm = CustomForm.builder()
+                .withDisplayButton(true)
+                .withButtonText(i18n.getMessage("customFormTitre.buttonText", locale))
                 .withCustomFields(listForm)
                 .withDescription(i18n.getMessage("customFormTitre.description", locale))
                 .build();
