@@ -156,7 +156,7 @@ class PaymentServiceImplTest {
         Assertions.assertEquals("Vous ne pouvez pas utiliser ce bon pour une commande inférieure a 5.00 €", ((PaymentFormDisplayFieldText) customForm.getCustomFields().get(0)).getContent());
 
         Assertions.assertEquals(PaymentFormInputFieldText.class, customForm.getCustomFields().get(1).getClass());
-        Assertions.assertEquals("Format de code barre incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getValidationErrorMessage());
+        Assertions.assertEquals("Numéro de bon d'achat incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getValidationErrorMessage());
         Assertions.assertEquals("Entrez le code barre du titre", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getLabel());
         Assertions.assertEquals("Code barre incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getRequiredErrorMessage());
         Assertions.assertEquals("cabTitre", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getKey());
