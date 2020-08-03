@@ -15,8 +15,8 @@ public class PaymentFormConfigurationServiceImplTest {
         PaymentFormConfigurationRequest request = MockUtils.aPaymentFormConfigurationRequest();
         PaymentFormConfigurationResponse response = service.getPaymentFormConfiguration(request);
 
-        Assertions.assertEquals("Choisissez votre banque",((PaymentFormConfigurationResponseSpecific)response).getPaymentForm().getDescription());
-        Assertions.assertEquals("Payer avec GlobalPos",((PaymentFormConfigurationResponseSpecific)response).getPaymentForm().getButtonText());
+        Assertions.assertEquals("",((PaymentFormConfigurationResponseSpecific)response).getPaymentForm().getDescription());
+        Assertions.assertEquals("Payer",((PaymentFormConfigurationResponseSpecific)response).getPaymentForm().getButtonText());
         Assertions.assertEquals(PaymentFormConfigurationResponseSpecific.class, response.getClass());
 
     }
