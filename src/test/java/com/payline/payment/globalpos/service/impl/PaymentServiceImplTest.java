@@ -168,7 +168,7 @@ class PaymentServiceImplTest {
         // init mocks
         Mockito.doReturn(MockUtils.getTransacOK()).when(httpService).getTransact(any(), any(), any(), any(), any());
         Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
-        Mockito.doReturn("true").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
+        Mockito.doReturn("<xml><codeErreur>1</codeErreur></xml>").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
         Mockito.verify(httpService, Mockito.never()).manageTransact(any(), any(), any(), eq(TransactionType.FINALISE_TRANSACTION));
 
         // call method
@@ -226,7 +226,7 @@ class PaymentServiceImplTest {
         // init mocks
         Mockito.doReturn(MockUtils.getTransacOK()).when(httpService).getTransact(any(), any(), any(), any(), any());
         Mockito.doReturn(MockUtils.getTitreTransacOK()).when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.DETAIL_TRANSACTION));
-        Mockito.doReturn("false").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
+        Mockito.doReturn("<xml><http_status>200</http_status><error>-31</error><message>Erreur d'annulation du titre en m�moire</message><detail/></xml>").when(httpService).manageTransact(any(), any(), any(), eq(TransactionType.CANCEL_TRANSACTION));
         Mockito.verify(httpService, Mockito.never()).manageTransact(any(), any(), any(), eq(TransactionType.FINALISE_TRANSACTION));
 
         // call method
@@ -235,7 +235,7 @@ class PaymentServiceImplTest {
         // assertions
         Assertions.assertEquals(PaymentResponseFailure.class, response.getClass());
 
-        Assertions.assertEquals("GlobalPos API is unable to cancel the ticket", ((PaymentResponseFailure) response).getErrorCode());
+        Assertions.assertEquals("Erreur d'annulation du titre en m�moire", ((PaymentResponseFailure) response).getErrorCode());
         Assertions.assertEquals(MockUtils.getNumTransac(), ((PaymentResponseFailure) response).getPartnerTransactionId());
         Assertions.assertNull(((PaymentResponseFailure) response).getTransactionDetails());
         Assertions.assertNull(((PaymentResponseFailure) response).getTransactionAdditionalData());

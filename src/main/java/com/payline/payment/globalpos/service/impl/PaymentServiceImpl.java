@@ -239,7 +239,9 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentResponse handleSetAnnulTransacResponse(String stringResponse, String partnerTransactionId, PaymentRequest request) {
         PaymentResponse paymentResponse;
 
-        if ("true".equalsIgnoreCase(stringResponse)) {
+        APIResponseError response = APIResponseError.fromXml(stringResponse);
+
+        if (response.getError() == 0) {
             // if cancellation is OK, return a new form to enter a new payment ticket
 
             // create the form
@@ -259,21 +261,8 @@ public class PaymentServiceImpl implements PaymentService {
                     .withPaymentFormConfigurationResponse(paymentFormConfigurationResponse)
                     .withRequestContext(requestContext)
                     .build();
-
-
-        } else if ("false".equalsIgnoreCase(stringResponse)) {
-            // if cancellation is NOT ok, return a failure response
-            String errorMessage = "GlobalPos API is unable to cancel the ticket";
-            LOGGER.info(errorMessage);
-            paymentResponse = PaymentResponseFailure.PaymentResponseFailureBuilder.aPaymentResponseFailure()
-                    .withPartnerTransactionId(partnerTransactionId)
-                    .withFailureCause(FailureCause.INVALID_DATA)
-                    .withErrorCode(errorMessage)
-                    .build();
-
         } else {
-            paymentResponse = this.responseFailure(APIResponseError.fromXml(stringResponse), partnerTransactionId);
-
+            paymentResponse = this.responseFailure(response, partnerTransactionId);
         }
 
         return paymentResponse;
