@@ -54,7 +54,7 @@ public class FormUtils {
                 .build();
         listForm.add(displayRetryMessage);
 
-        listForm.add(createInputFieldText(locale));
+        listForm.add(createPaymentTicketInputFieldText(locale));
 
         CustomForm customForm = CustomForm.builder()
                 .withCustomFields(listForm)
@@ -73,7 +73,7 @@ public class FormUtils {
             throw new InvalidDataException("locale must not be null when creating the payment ticket form");
         }
         List<PaymentFormField> listForm = new ArrayList<>();
-        listForm.add(createInputFieldText(locale));
+        listForm.add(createPaymentTicketInputFieldText(locale));
 
         CustomForm customForm = CustomForm.builder()
                 .withDisplayButton(true)
@@ -88,7 +88,12 @@ public class FormUtils {
                 .build();
     }
 
-    public PaymentFormInputFieldText createInputFieldText(Locale locale) {
+    /**
+     * create the inputFieldText used to enter the payment ticket
+     * @param locale used to create message in the right language
+     * @return the inputFieldText to put in a CustomForm
+     */
+    public PaymentFormInputFieldText createPaymentTicketInputFieldText(Locale locale) {
         // Pattern: regexp for exactly 44 numbers
         return PaymentFormInputFieldText.PaymentFormFieldTextBuilder.aPaymentFormFieldText()
                 .withRequiredErrorMessage(i18n.getMessage("formCabTitre.requiredErrorMessage", locale))
