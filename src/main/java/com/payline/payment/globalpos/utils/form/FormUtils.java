@@ -1,10 +1,8 @@
 package com.payline.payment.globalpos.utils.form;
 
 import com.payline.payment.globalpos.exception.InvalidDataException;
-import com.payline.payment.globalpos.utils.AmountParse;
 import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
 import com.payline.payment.globalpos.utils.i18n.I18nService;
-import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.paymentform.bean.field.*;
 import com.payline.pmapi.bean.paymentform.bean.form.CustomForm;
 import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFormConfigurationResponseSpecific;
@@ -36,21 +34,19 @@ public class FormUtils {
     }
 
 
-    public PaymentFormConfigurationResponseSpecific createRetryForm(Locale locale, Amount amount) {
+    public PaymentFormConfigurationResponseSpecific createRetryForm(Locale locale, String amount, String currency) {
         if (locale == null) {
             throw new InvalidDataException("locale must not be null when creating the RETRY payment ticket form");
         }
 
-        if (amount == null || amount.getAmountInSmallestUnit() == null || amount.getCurrency() == null) {
+        if (amount == null || currency == null) {
             throw new InvalidDataException("amount must not be null when creating the RETRY payment ticket form");
         }
         List<PaymentFormField> listForm = new ArrayList<>();
 
         // create a field text to display why the buyer has to retry
-        String sAmount = AmountParse.splitDecimal(amount).toString();
-        String sCurrency = amount.getCurrency().getSymbol(locale);
         PaymentFormDisplayFieldText displayRetryMessage = PaymentFormDisplayFieldText.PaymentFormDisplayFieldTextBuilder.aPaymentFormDisplayFieldText()
-                .withContent(i18n.getMessage("formCabTitre.retryMessage", locale, sAmount, sCurrency))
+                .withContent(i18n.getMessage("formCabTitre.retryMessage", locale, amount, currency))
                 .build();
         listForm.add(displayRetryMessage);
 

@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.payline.payment.globalpos.utils.constant.RequestContextKeys.STEP_RETRY;
@@ -195,7 +196,7 @@ public class PaymentServiceImpl implements PaymentService {
 
                     // cancel the payment ticket
                     stringResponse = httpService.manageTransact(configuration, partnerTransactionId, response.getId(), TransactionType.CANCEL_TRANSACTION);
-                    paymentResponse = handleSetAnnulTransacResponse(stringResponse, partnerTransactionId, request);
+                    paymentResponse = handleSetAnnulTransacResponse(stringResponse, partnerTransactionId, request, gpAmount.toString());
                     break;
             }
         }
@@ -236,7 +237,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
-    private PaymentResponse handleSetAnnulTransacResponse(String stringResponse, String partnerTransactionId, PaymentRequest request) {
+    private PaymentResponse handleSetAnnulTransacResponse(String stringResponse, String partnerTransactionId, PaymentRequest request, String amount) {
         PaymentResponse paymentResponse;
 
         APIResponseError response = APIResponseError.fromXml(stringResponse);
@@ -245,7 +246,9 @@ public class PaymentServiceImpl implements PaymentService {
             // if cancellation is OK, return a new form to enter a new payment ticket
 
             // create the form
-            PaymentFormConfigurationResponse paymentFormConfigurationResponse = formUtils.createRetryForm(request.getLocale(), request.getAmount());
+            Locale locale = request.getLocale();
+            String currency =  request.getAmount().getCurrency().getSymbol(locale);
+            PaymentFormConfigurationResponse paymentFormConfigurationResponse = formUtils.createRetryForm( locale, amount, currency);
 
             // create RequestContext for the next step (STEP2 again)
             Map<String, String> requestContextMap = new HashMap<>();

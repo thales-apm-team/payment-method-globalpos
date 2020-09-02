@@ -194,7 +194,7 @@ class PaymentServiceImplTest {
         Assertions.assertEquals(2, customForm.getCustomFields().size());
 
         Assertions.assertEquals(PaymentFormDisplayFieldText.class, customForm.getCustomFields().get(0).getClass());
-        Assertions.assertEquals("Vous ne pouvez pas utiliser ce bon pour une commande inférieure a 5.00 €", ((PaymentFormDisplayFieldText) customForm.getCustomFields().get(0)).getContent());
+        Assertions.assertEquals("Vous ne pouvez pas utiliser ce bon pour une commande inférieure a 10 €", ((PaymentFormDisplayFieldText) customForm.getCustomFields().get(0)).getContent());
 
         Assertions.assertEquals(PaymentFormInputFieldText.class, customForm.getCustomFields().get(1).getClass());
         Assertions.assertEquals("Numéro de bon d'achat incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getValidationErrorMessage());
