@@ -199,7 +199,7 @@ class PaymentServiceImplTest {
         Assertions.assertEquals(PaymentFormInputFieldText.class, customForm.getCustomFields().get(1).getClass());
         Assertions.assertEquals("Numéro de bon d'achat incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getValidationErrorMessage());
         Assertions.assertEquals("Entrez le code barre du titre", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getLabel());
-        Assertions.assertEquals("Code barre incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getRequiredErrorMessage());
+        Assertions.assertEquals("Numéro de bon d'achat incorrect", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getRequiredErrorMessage());
         Assertions.assertEquals("cabTitre", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getKey());
         Assertions.assertEquals("Numéro de bon d'achat", ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getPlaceholder());
         Assertions.assertEquals(InputType.NUMBER, ((PaymentFormInputFieldText) customForm.getCustomFields().get(1)).getInputType());
