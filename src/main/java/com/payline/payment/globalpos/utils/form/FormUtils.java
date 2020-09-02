@@ -97,7 +97,7 @@ public class FormUtils {
         // Pattern: regexp for exactly 44 numbers
         return PaymentFormInputFieldText.PaymentFormFieldTextBuilder.aPaymentFormFieldText()
                 .withRequiredErrorMessage(i18n.getMessage("formCabTitre.requiredErrorMessage", locale))
-                .withValidation(Pattern.compile("^[0-9]{44}$"))
+                .withValidation(Pattern.compile("^( *)[0-9]{44}( *)$"))
                 .withValidationErrorMessage(i18n.getMessage("formCabTitre.validationErrorMessage", locale))
                 .withPlaceholder(i18n.getMessage("formCabTitre.placeHolder", locale))
                 .withKey(FormConfigurationKeys.CABTITRE)

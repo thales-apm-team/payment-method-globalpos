@@ -7,7 +7,7 @@ import com.payline.pmapi.bean.paymentform.response.configuration.impl.PaymentFor
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class PaymentFormConfigurationServiceImplTest {
+class PaymentFormConfigurationServiceImplTest {
     private PaymentFormConfigurationServiceImpl service = new PaymentFormConfigurationServiceImpl();
 
     @Test
