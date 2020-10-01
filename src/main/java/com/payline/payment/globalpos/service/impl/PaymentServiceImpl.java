@@ -154,6 +154,10 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse askForAddingTicket(PaymentRequest request, String partnerTransactionId) {
         final RequestConfiguration configuration = RequestConfiguration.build(request);
 
+        if(request.getPaymentFormContext().getPaymentFormParameter().get(FormConfigurationKeys.CABTITRE) == null){
+            throw new InvalidDataException("CABTITRE is missing in the payment request");
+        }
+
         // extract needed data
         String cabTitre = request.getPaymentFormContext().getPaymentFormParameter().get(FormConfigurationKeys.CABTITRE).trim();
         BigDecimal paylineAmount = AmountParse.splitDecimal(request.getAmount());

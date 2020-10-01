@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class HttpServiceTest {
-    private final String guid = "123";
-    private final String storeCode = "456";
-    private final String checkoutNumber = "789";
-    String transactionId = MockUtils.getTRANSACTIONID();
+    private static final String guid = "123";
+    private static final String storeCode = "456";
+    private static final String checkoutNumber = "789";
+    private static final String transactionId = MockUtils.getTRANSACTIONID();
 
 
     private RequestConfiguration configuration = new RequestConfiguration(
@@ -157,10 +157,10 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String partnerTRansactionId = MockUtils.getNumTransac();
+        String partnerTransactionId = MockUtils.getNumTransac();
         String title = MockUtils.getTitre();
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.manageTransact(configuration, partnerTRansactionId, title, TransactionType.DETAIL_TRANSACTION));
+                () -> httpService.manageTransact(configuration, partnerTransactionId, title, TransactionType.DETAIL_TRANSACTION));
 
         Assertions.assertEquals("DETAIL_TRANSACTION wrong data", thrown.getMessage());
 
