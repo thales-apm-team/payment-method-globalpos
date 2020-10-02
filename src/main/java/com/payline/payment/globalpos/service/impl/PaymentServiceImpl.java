@@ -15,7 +15,6 @@ import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.RequestContextKeys;
 import com.payline.payment.globalpos.utils.form.FormUtils;
 import com.payline.payment.globalpos.utils.http.TransactionType;
-import com.payline.payment.globalpos.utils.i18n.I18nService;
 import com.payline.pmapi.bean.common.Amount;
 import com.payline.pmapi.bean.common.FailureCause;
 import com.payline.pmapi.bean.payment.RequestContext;
@@ -39,8 +38,6 @@ import static com.payline.payment.globalpos.utils.constant.RequestContextKeys.ST
 public class PaymentServiceImpl implements PaymentService {
     private static final Logger LOGGER = LogManager.getLogger(PaymentServiceImpl.class);
     private HttpService httpService = HttpService.getInstance();
-
-    private I18nService i18n = I18nService.getInstance();
     private FormUtils formUtils = FormUtils.getInstance();
 
     // the status for finalize the transaction can only be COMMIT or ROLLBACK
@@ -68,7 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
                 // Transaction has already been created, just add payment ticket to it
                 String partnerTransactionId = request.getRequestContext().getRequestData().get(RequestContextKeys.NUMTRANSAC);
 
-                if (PluginUtils.isEmpty(partnerTransactionId)){
+                if (PluginUtils.isEmpty(partnerTransactionId)) {
                     String errorMessage = "Retry request must contain a partnerTransactionId";
                     LOGGER.error(errorMessage);
                     throw new InvalidDataException(errorMessage);
@@ -157,8 +154,12 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentResponse askForAddingTicket(PaymentRequest request, String partnerTransactionId) {
         final RequestConfiguration configuration = RequestConfiguration.build(request);
 
+        if(request.getPaymentFormContext().getPaymentFormParameter().get(FormConfigurationKeys.CABTITRE) == null){
+            throw new InvalidDataException("CABTITRE is missing in the payment request");
+        }
+
         // extract needed data
-        String cabTitre = request.getPaymentFormContext().getPaymentFormParameter().get(FormConfigurationKeys.CABTITRE);
+        String cabTitre = request.getPaymentFormContext().getPaymentFormParameter().get(FormConfigurationKeys.CABTITRE).trim();
         BigDecimal paylineAmount = AmountParse.splitDecimal(request.getAmount());
 
         // add a payment ticket to the transaction created in step1

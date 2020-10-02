@@ -18,8 +18,9 @@ class SetFinTransacTest {
 
     @Test
     void noXml() {
+        String s = MockUtils.noXml();
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> SetFinTransac.fromXml(MockUtils.noXml()));
+                () -> SetFinTransac.fromXml(s));
 
         Assertions.assertEquals("Unable to parse XML SetFinTransac", thrown.getMessage());
     }

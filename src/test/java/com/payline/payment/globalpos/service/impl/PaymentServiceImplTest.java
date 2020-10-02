@@ -1,6 +1,7 @@
 package com.payline.payment.globalpos.service.impl;
 
 import com.payline.payment.globalpos.MockUtils;
+import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.service.HttpService;
 import com.payline.payment.globalpos.utils.constant.FormConfigurationKeys;
 import com.payline.payment.globalpos.utils.constant.RequestContextKeys;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import sun.jvm.hotspot.utilities.Assert;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -325,4 +327,26 @@ class PaymentServiceImplTest {
         Assertions.assertNull(responseSuccess.getReservedAmount());
         Assertions.assertEquals(EmptyTransactionDetails.class, responseSuccess.getTransactionDetails().getClass());
     }
+
+    @Test
+    void askForAddingTicketWithNullParameter() {
+
+        Map<String, String> paymentFormParameters = new HashMap<>();
+        paymentFormParameters.put(FormConfigurationKeys.CABTITRE, null);
+
+        PaymentFormContext paymentFormContext = PaymentFormContext.PaymentFormContextBuilder
+                .aPaymentFormContext()
+                .withPaymentFormParameter(paymentFormParameters)
+                .withSensitivePaymentFormParameter(new HashMap<>())
+                .build();
+
+        PaymentRequest paymentRequest = MockUtils.aPaylinePaymentRequestBuilder().withPaymentFormContext(paymentFormContext).build();
+
+        String partnerTransactionId = "5e7db72846ebd";
+
+        // assertions
+        Assertions.assertThrows(InvalidDataException.class, () -> service.askForAddingTicket(paymentRequest, partnerTransactionId));
+    }
+
+
 }
