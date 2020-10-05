@@ -30,9 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class HttpServiceTest {
-    private final String guid = "123";
-    private final String storeCode = "456";
-    private final String checkoutNumber = "789";
+    private static final String guid = "123";
+    private static final String storeCode = "456";
+    private static final String checkoutNumber = "789";
+    private static final String transactionId = MockUtils.getTRANSACTIONID();
+
 
     private RequestConfiguration configuration = new RequestConfiguration(
             MockUtils.aContractConfiguration()
@@ -95,8 +97,8 @@ class HttpServiceTest {
         String transactionId = MockUtils.getTRANSACTIONID();
 
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.getTransact(configuration, null, storeCode, checkoutNumber,transactionId));
-
+                () -> httpService.getTransact(configuration, null, storeCode, checkoutNumber, transactionId));
+      
         Assertions.assertEquals("GUID is missing", thrown.getMessage());
     }
 
@@ -161,11 +163,11 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String numTransac =  MockUtils.getNumTransac();
-        String titre =  MockUtils.getTitre();
 
+        String partnerTransactionId = MockUtils.getNumTransac();
+        String title = MockUtils.getTitre();
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.manageTransact(configuration,numTransac, titre, TransactionType.DETAIL_TRANSACTION));
+                () -> httpService.manageTransact(configuration, partnerTransactionId, title, TransactionType.DETAIL_TRANSACTION));
 
         Assertions.assertEquals("DETAIL_TRANSACTION wrong data", thrown.getMessage());
 
@@ -195,11 +197,10 @@ class HttpServiceTest {
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
 
-        String numTransac =  MockUtils.getNumTransac();
-        String name = PaymentServiceImpl.STATUS.COMMIT.name();
-
+        String partnerTransactionId = MockUtils.getNumTransac();
+        String name =  PaymentServiceImpl.STATUS.COMMIT.name();
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> httpService.manageTransact(configuration,numTransac, name, TransactionType.FINALISE_TRANSACTION));
+                () -> httpService.manageTransact(configuration, partnerTransactionId, name, TransactionType.FINALISE_TRANSACTION));
 
         Assertions.assertEquals("FINALISE_TRANSACTION wrong data", thrown.getMessage());
     }

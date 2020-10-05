@@ -119,6 +119,7 @@ class LogoPaymentFormConfigurationServiceTest {
 
         // when: calling method getLogo(), then: an exception is thrown
         assertThrows(PluginException.class, () -> testService.getLogo("whatever",locale ));
+
     }
 
 
