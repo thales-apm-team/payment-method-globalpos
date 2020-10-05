@@ -94,9 +94,11 @@ class HttpServiceTest {
         contractProperties.put(ContractConfigurationKeys.CODEMAGASIN, new ContractProperty(MockUtils.getCodeMagasin()));
         contractProperties.put(ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(MockUtils.getNumeroCaisse()));
 
+        String transactionId = MockUtils.getTRANSACTIONID();
+
         Throwable thrown = assertThrows(InvalidDataException.class,
                 () -> httpService.getTransact(configuration, null, storeCode, checkoutNumber, transactionId));
-
+      
         Assertions.assertEquals("GUID is missing", thrown.getMessage());
     }
 
@@ -112,6 +114,8 @@ class HttpServiceTest {
         contractProperties.put(ContractConfigurationKeys.GUID, new ContractProperty(MockUtils.getGuid()));
         contractProperties.put(ContractConfigurationKeys.NUMEROCAISSE, new ContractProperty(MockUtils.getNumeroCaisse()));
 
+        String transactionId = MockUtils.getTRANSACTIONID();
+
         Throwable thrown = assertThrows(InvalidDataException.class,
                 () -> httpService.getTransact(configuration, guid, null, checkoutNumber, transactionId));
 
@@ -125,6 +129,8 @@ class HttpServiceTest {
                 , MockUtils.getTransacKO()
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
+
+        String transactionId = MockUtils.getTRANSACTIONID();
 
         Throwable thrown = assertThrows(InvalidDataException.class,
                 () -> httpService.getTransact(configuration, guid, storeCode, checkoutNumber, transactionId));
@@ -156,6 +162,7 @@ class HttpServiceTest {
                 , MockUtils.getTitreTransacOK()
                 , null);
         Mockito.doReturn(stringResponse).when(client).get(any(), any());
+
 
         String partnerTransactionId = MockUtils.getNumTransac();
         String title = MockUtils.getTitre();

@@ -20,6 +20,7 @@ class GetTransacTest {
 
     @Test
     void noXml() {
+
         String s = MockUtils.noXml();
         Throwable thrown = assertThrows(InvalidDataException.class,
                 () -> GetTransac.fromXml(s));
