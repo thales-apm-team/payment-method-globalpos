@@ -1,8 +1,6 @@
 package com.payline.payment.globalpos.utils;
 
 
-import com.payline.payment.globalpos.MockUtils;
-import com.payline.payment.globalpos.bean.response.APIResponseError;
 import com.payline.payment.globalpos.exception.InvalidDataException;
 import com.payline.payment.globalpos.utils.form.FormUtils;
 import com.payline.payment.globalpos.utils.i18n.I18nService;
@@ -14,7 +12,7 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class FormUtilsTest {
+ class FormUtilsTest {
 
     private FormUtils formUtils = FormUtils.getInstance();
     private I18nService i18n = I18nService.getInstance();
@@ -36,4 +34,4 @@ public class FormUtilsTest {
 
 
         }
-} 
+}

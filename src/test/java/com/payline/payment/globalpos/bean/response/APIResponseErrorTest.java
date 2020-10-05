@@ -13,7 +13,6 @@ class APIResponseErrorTest {
     void fromXml() {
         APIResponseError value = APIResponseError.fromXml(MockUtils.getTransacKO());
         Assertions.assertNotNull(value.getHttpStatus());
-        Assertions.assertNotNull(value.getError());
         Assertions.assertNotNull(value.getMessage());
         Assertions.assertEquals("200", value.getHttpStatus());
         Assertions.assertEquals(-50, value.getError());
@@ -22,8 +21,9 @@ class APIResponseErrorTest {
 
     @Test
     void noXml() {
+        String noXml = MockUtils.noXml();
         Throwable thrown = assertThrows(InvalidDataException.class,
-                () -> APIResponseError.fromXml(MockUtils.noXml()));
+                () -> APIResponseError.fromXml(noXml));
 
         Assertions.assertEquals("Unable to parse XML GlobalPOSAPIResponse", thrown.getMessage());
     }
