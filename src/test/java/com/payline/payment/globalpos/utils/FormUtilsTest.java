@@ -12,34 +12,35 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
- class FormUtilsTest {
+class FormUtilsTest {
 
     private FormUtils formUtils = FormUtils.getInstance();
     private I18nService i18n = I18nService.getInstance();
 
-     private final String amount = "12";
-     private final String currencySymbol = "€";
-     private final Locale locale = Locale.FRANCE;
+    private static final String AMOUNT = "12";
+    private static final String CURRENCY_SYMBOL = "€";
+    private static final Locale LOCALE = Locale.FRANCE;
 
-        @Test
-        void createRetryForm() {
+    @Test
+    void createRetryForm() {
 
-            PaymentFormConfigurationResponseSpecific paymentFormConfigurationResponseSpecific = formUtils.createRetryForm(locale,amount,currencySymbol);
+        PaymentFormConfigurationResponseSpecific paymentFormConfigurationResponseSpecific = formUtils.createRetryForm(LOCALE, AMOUNT, CURRENCY_SYMBOL);
 
-            Assertions.assertEquals(paymentFormConfigurationResponseSpecific.getPaymentForm().getDescription(), i18n.getMessage("customFormTitre.description", locale));
-        }
-        @Test
-        void createRetryFormWithNullAmount() {
-             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,null,currencySymbol));
-        }
+        Assertions.assertEquals(paymentFormConfigurationResponseSpecific.getPaymentForm().getDescription(), i18n.getMessage("customFormTitre.description", LOCALE));
+    }
 
-        @Test
-        void createRetryFormWithNullCurrencySymbol() {
-             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,amount,null));
-        }
+    @Test
+    void createRetryFormWithNullAmount() {
+        assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(LOCALE, null, CURRENCY_SYMBOL));
+    }
 
-        @Test
-        void createRetryFormWithNullLocale() {
-             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(null,amount,currencySymbol));
-        }
+    @Test
+    void createRetryFormWithNullCurrencySymbol() {
+        assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(LOCALE, AMOUNT, null));
+    }
+
+    @Test
+    void createRetryFormWithNullLocale() {
+        assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(null, AMOUNT, CURRENCY_SYMBOL));
+    }
 }
