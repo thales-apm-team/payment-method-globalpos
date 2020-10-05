@@ -17,21 +17,29 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     private FormUtils formUtils = FormUtils.getInstance();
     private I18nService i18n = I18nService.getInstance();
 
+     private final String amount = "12";
+     private final String currencySymbol = "€";
+     private final Locale locale = Locale.FRANCE;
 
         @Test
         void createRetryForm() {
-            Locale locale = Locale.FRANCE;
-            String amount = "12";
-            String currencySymbol = "€";
 
             PaymentFormConfigurationResponseSpecific paymentFormConfigurationResponseSpecific = formUtils.createRetryForm(locale,amount,currencySymbol);
 
             Assertions.assertEquals(paymentFormConfigurationResponseSpecific.getPaymentForm().getDescription(), i18n.getMessage("customFormTitre.description", locale));
+        }
+        @Test
+        void createRetryFormWithNullAmount() {
+             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,null,currencySymbol));
+        }
 
-            assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,null,currencySymbol));
-            assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,amount,null));
-            assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(null,amount,currencySymbol));
+        @Test
+        void createRetryFormWithNullCurrencySymbol() {
+             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(locale,amount,null));
+        }
 
-
+        @Test
+        void createRetryFormWithNullLocale() {
+             assertThrows(InvalidDataException.class, () -> formUtils.createRetryForm(null,amount,currencySymbol));
         }
 }
