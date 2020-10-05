@@ -34,19 +34,19 @@ public class FormUtils {
     }
 
 
-    public PaymentFormConfigurationResponseSpecific createRetryForm(Locale locale, String amount, String currency) {
+        public PaymentFormConfigurationResponseSpecific createRetryForm(Locale locale, String amount, String currencySymbol) {
         if (locale == null) {
             throw new InvalidDataException("locale must not be null when creating the RETRY payment ticket form");
         }
 
-        if (amount == null || currency == null) {
+        if (amount == null || currencySymbol == null) {
             throw new InvalidDataException("amount must not be null when creating the RETRY payment ticket form");
         }
         List<PaymentFormField> listForm = new ArrayList<>();
 
         // create a field text to display why the buyer has to retry
         PaymentFormDisplayFieldText displayRetryMessage = PaymentFormDisplayFieldText.PaymentFormDisplayFieldTextBuilder.aPaymentFormDisplayFieldText()
-                .withContent(i18n.getMessage("formCabTitre.retryMessage", locale, amount, currency))
+                .withContent(i18n.getMessage("formCabTitre.retryMessage", locale, amount, currencySymbol))
                 .build();
         listForm.add(displayRetryMessage);
 
