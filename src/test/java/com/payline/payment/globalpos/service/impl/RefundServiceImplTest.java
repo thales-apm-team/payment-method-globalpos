@@ -57,6 +57,7 @@ class RefundServiceImplTest {
         RefundResponseSuccess responseSuccess = (RefundResponseSuccess) response;
         Assertions.assertEquals(MockUtils.getPARTNER_TRANSACTIONID(), responseSuccess.getPartnerTransactionId());
         Assertions.assertEquals("0", responseSuccess.getStatusCode());
+        Assertions.assertNotNull(responseSuccess.getMiscellaneous());
         Assertions.assertEquals("2539400019400018828372289117202107203902100000",responseSuccess.getMiscellaneous().get(RequestContextKeys.VOUCHER));
     }
 

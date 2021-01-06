@@ -102,8 +102,7 @@ public class RefundServiceImpl implements RefundService {
         Map<String, String> miscellaneous = new HashMap<>();
         String cardId = cardResponse.getCard().getCardId();
         RefundResponse refundResponse;
-
-        miscellaneous.put(RequestContextKeys.VOUCHER,cardId);
+        miscellaneous.put(RequestContextKeys.VOUCHER, cardId);
 
         // ask for validation and email sending
         JsonBeanResponse sendMailResponse = httpService.setGenCardMail(configuration, token, cardId);
